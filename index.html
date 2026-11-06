@@ -181,7 +181,8 @@ svg.lchart{width:100%;height:auto;display:block;overflow:visible}
 <header>
   <h1 id="bHome">전국 시도별 소비 만족도 <small>KOSIS Open API 대시보드</small></h1>
   <span id="mode" class="badge">DEMO 데이터</span>
-  <input id="proxy" placeholder="Apps Script 웹앱 URL (.../exec)">
+  <input id="proxy" value="https://script.google.com/macros/s/AKfycbzsCRSS-lZC4ZH8FHrgT52Y1b9VS601HuWRhC0LMKHBmcDnLuPTvtNG_9XeUXJba5Pt/exec"
+  placeholder="Apps Script 웹앱 URL (.../exec)">
   <button class="btn" id="bLive">실데이터 연결</button>
   <button class="ghost" id="bDemo">DEMO 보기</button>
   <button class="ghost" id="bCsv">CSV</button>
@@ -1137,7 +1138,7 @@ $("modal").onclick=function(e){if(e.target===$("modal"))$("modal").classList.add
 Array.prototype.forEach.call(document.querySelectorAll(".mcard"),function(c){
  c.onclick=function(){openV(c.getAttribute("data-k"));};});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")$("modal").classList.add("hide");});
-try{$("proxy").value=localStorage.getItem("kosisProxy")||"";}catch(e){}
+try{$("proxy").value=localStorage.getItem("kosisProxy")||"https://script.google.com/macros/s/AKfycbzsCRSS-lZC4ZH8FHrgT52Y1b9VS601HuWRhC0LMKHBmcDnLuPTvtNG_9XeUXJba5Pt/exec";}catch(e){}
 useDemo();
 </script>
 </body>
