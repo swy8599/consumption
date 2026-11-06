@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>전국 시도별 소비 만족도</title>
+<style>
+:root{--bg:#f1f7fc;--bg2:#e7f1fa;--card:#fff;--line:#dbeaf6;--line2:#eaf3fa;--txt:#2d3e50;--sub:#8ba3b9;--ac:#5aa9dd;--ac2:#8ecbf0;--acsoft:#eaf5fd;--up:#4e9c88;--dn:#e08a93;--sh:0 2px 12px rgba(90,140,180,.08)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;letter-spacing:-.2px}
+header{padding:16px 28px;background:#fff;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+h1{font-size:19px;margin:0;flex:1 1 280px;cursor:pointer;font-weight:800}
+h1 small{font-size:12px;color:var(--sub);font-weight:500;margin-left:8px}
+.badge{padding:4px 11px;border-radius:999px;font-size:11.5px;font-weight:700;background:#dcecf9;color:#3d7ca8}
+.badge.live{background:#d7eee6;color:#2f6b58}
+input,button,select{background:#fff;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit}
+#proxy{width:240px}
+.btn{cursor:pointer;background:var(--ac);color:#fff;border-color:var(--ac);font-weight:700}
+.btn:hover{background:#4a98cc}
+.ghost{cursor:pointer;color:var(--sub)}
+.ghost:hover{color:var(--ac);border-color:var(--ac2);background:var(--acsoft)}
+#status{padding:9px 28px;font-size:12.5px;color:var(--sub);background:var(--bg2);border-bottom:1px solid var(--line)}
+.err{color:#cc6b74}.ok{color:#40876f}.warn{color:#4e8cba}
+.wrap{padding:26px 28px}
+.home{max-width:1000px;margin:34px auto}
+.home h2{font-size:28px;text-align:center;margin:0 0 10px;font-weight:800}
+.home p{text-align:center;color:var(--sub);font-size:14px;margin:0 0 28px}
+.bigbtn{display:block;margin:0 auto 34px;cursor:pointer;border:0;border-radius:22px;padding:28px 56px;font-size:23px;font-weight:800;background:linear-gradient(135deg,#8ecbf0,#5aa9dd);color:#fff;box-shadow:0 14px 34px rgba(90,169,221,.3);transition:.18s}
+.bigbtn:hover{transform:translateY(-4px)}
+.bigbtn .s{display:block;font-size:12.5px;font-weight:600;opacity:.92;margin-top:8px}
+.divider{display:flex;align-items:center;gap:14px;color:var(--sub);font-size:12.5px;margin:34px 0 22px}
+.divider:before,.divider:after{content:"";flex:1;height:1px;background:var(--line)}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.mcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 22px;cursor:pointer;transition:.18s;box-shadow:var(--sh)}
+.mcard:hover{transform:translateY(-4px);border-color:var(--ac2)}
+.mcard .ico{font-size:30px}
+.mcard .t{font-size:18px;font-weight:800;margin:12px 0 6px}
+.mcard .d{font-size:12.5px;color:var(--sub);line-height:1.65}
+.mcard .m{font-size:11.5px;color:var(--ac);margin-top:12px;font-weight:600}
+.mcard .spark{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.years{display:flex;gap:6px;flex-wrap:wrap}
+.ybtn{padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--sub);cursor:pointer;font-size:13px}
+.ybtn:hover{border-color:var(--ac2);color:var(--ac)}
+.ybtn.on{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:700}
+.player{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 16px;margin-bottom:18px;box-shadow:var(--sh);flex-wrap:wrap}
+.pl{font-size:11.5px;color:var(--sub);font-weight:600}
+.playbtn{cursor:pointer;width:38px;height:38px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:13px;padding:0}
+.playbtn.on{background:#e08a93}
+.rangewrap{flex:1 1 200px;min-width:160px}
+input[type=range]{width:100%;-webkit-appearance:none;background:transparent;border:0;padding:0}
+input[type=range]::-webkit-slider-runnable-track{height:7px;border-radius:4px;background:linear-gradient(90deg,#bfe0f5,#5aa9dd)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:19px;height:19px;border-radius:50%;background:#fff;border:3px solid var(--ac);margin-top:-6px;cursor:pointer}
+input[type=range]::-moz-range-track{height:7px;border-radius:4px;background:#bfe0f5}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--ac);cursor:pointer}
+.ticks{display:flex;justify-content:space-between;font-size:10.5px;color:var(--sub);margin-top:3px}
+.yearnow{font-size:18px;font-weight:800;color:var(--ac);min-width:62px;text-align:center}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--sh)}
+.kpi .l{font-size:12px;color:var(--sub)}
+.kpi .v{font-size:22px;font-weight:800;margin-top:5px}
+.split{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--sh)}
+.card h3{font-size:14px;margin:2px 0 10px;color:#4a6274;font-weight:700}
+.card h3 .sub{font-size:11.5px;color:var(--sub);font-weight:400;margin-left:6px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 9px;border-bottom:1px solid var(--line2);text-align:right}
+th:nth-child(-n+2),td:nth-child(-n+2){text-align:left}
+th{color:var(--sub);font-weight:600;position:sticky;top:0;background:#fff;z-index:2}
+.rank{display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:8px;background:#e9f2f9;color:#5d7a90;font-size:11.5px;font-weight:700}
+.rank.g1{background:#f4d58d;color:#5a4414}.rank.g2{background:#d7e2ea}.rank.g3{background:#bfd9ee}
+.bar{height:5px;border-radius:3px;background:linear-gradient(90deg,#bfe0f5,#5aa9dd);display:block;margin-top:4px}
+.scroll{max-height:620px;overflow:auto}
+.hide{display:none!important}
+.notice{background:#eaf5fd;border:1px solid #c9e3f5;color:#3d7ca8;border-radius:12px;padding:12px 16px;font-size:12.5px;margin-bottom:16px}
+.doc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:0;margin-bottom:18px;box-shadow:var(--sh);overflow:hidden}
+.doc .dh{display:flex;align-items:center;gap:10px;padding:13px 18px;cursor:pointer;user-select:none;background:linear-gradient(90deg,#f4fafe,#fff)}
+.doc .dh .ic{font-size:17px}
+.doc .dh b{font-size:13.5px}
+.doc .dh .tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:#dcecf9;color:#3d7ca8}
+.doc .dh .tag.c{background:#fdeef3;color:#b0637f}
+.doc .dh .tag.g{background:#e0f1ea;color:#3b7a66}
+.doc .dh .arr{margin-left:auto;color:var(--sub);font-size:12px}
+.doc .db{padding:4px 18px 18px;border-top:1px solid var(--line2);font-size:12.8px;line-height:1.75;color:#43596b}
+.doc.cl .db{display:none}
+.doc .db h4{margin:14px 0 6px;font-size:12.5px;color:var(--ac);font-weight:800;letter-spacing:0}
+.doc .db p{margin:4px 0}
+.doc .db ul{margin:4px 0 0;padding-left:18px}
+.doc .db li{margin:3px 0}
+.doc .db .fml{display:inline-block;background:#f4f9fd;border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12.3px;margin-top:4px;color:#36596f}
+.doc .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px}
+.doc .meta div{background:#f7fbfe;border:1px solid var(--line2);border-radius:10px;padding:8px 11px}
+.doc .meta .k{font-size:10.8px;color:var(--sub)}
+.doc .meta .v{font-size:12.4px;font-weight:700;margin-top:2px}
+.doc .cau{margin-top:12px;background:#fff8f0;border:1px solid #f1dcc2;border-radius:10px;padding:9px 12px;color:#8a6334;font-size:12.2px}
+.mcard .why{margin-top:10px;font-size:11.5px;color:#5d7a90;background:#f5fafe;border:1px dashed var(--line);border-radius:10px;padding:8px 10px;line-height:1.6}
+.alayout{display:grid;grid-template-columns:1fr 1.02fr;gap:18px}
+@media(max-width:1050px){.alayout{grid-template-columns:1fr}}
+.mapbox{position:relative}
+svg.kmap{width:100%;height:auto;display:block}
+.mapimg{position:relative;width:100%;max-width:520px;margin:0 auto}
+.mapimg img{width:100%;height:auto;display:block}
+.mapimg svg.kov{position:absolute;left:0;top:0;width:100%;height:100%}
+.mk{cursor:pointer;stroke:#fff;stroke-width:1.6}.mk:hover{stroke:#2f6e96;stroke-width:2.6}.mk.sel{stroke:#1f4f70;stroke-width:3}
+.mlabel{font-size:11.5px;font-weight:700;pointer-events:none;text-anchor:middle;fill:#2d3e50}
+.mvalue{font-size:11px;font-weight:800;pointer-events:none;text-anchor:middle;fill:#2f6e96}
+.mbg{fill:#fff;opacity:.85;pointer-events:none}
+.sea{fill:#f4fafe}
+.prov{stroke:#fff;stroke-width:1.8;stroke-linejoin:round;cursor:pointer}
+.prov:hover{stroke:#5a8aa8;stroke-width:2.6}
+.prov.sel{stroke:#2f6e96;stroke-width:3.4}
+.plabel{font-size:16px;font-weight:700;pointer-events:none;text-anchor:middle}
+.pvalue{font-size:17px;font-weight:800;pointer-events:none;text-anchor:middle}
+.lead{stroke:#a9c4d6;stroke-width:1.2;fill:none}
+.tip{position:absolute;pointer-events:none;background:#fff;border:1px solid var(--ac2);border-radius:10px;padding:9px 12px;font-size:12.5px;display:none;z-index:9;white-space:nowrap;line-height:1.55;box-shadow:0 8px 20px rgba(90,140,180,.2)}
+.legend{display:flex;align-items:center;gap:9px;margin-top:10px;font-size:11.5px;color:var(--sub)}
+.legend .grad{flex:1;height:11px;border-radius:6px}
+.metricsel{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.mbtn{cursor:pointer;flex:1;min-width:92px;padding:9px 6px;border-radius:11px;border:1px solid var(--line);background:#fff;color:var(--sub);font-size:12.5px;font-weight:600}
+.mbtn.on{background:var(--acsoft);color:#3d7ca8;border-color:var(--ac2)}
+.ph{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.ph .nm{font-size:25px;font-weight:800}
+.ph .tag{font-size:12px;padding:4px 11px;border-radius:999px;background:var(--acsoft);color:#3d7ca8;font-weight:600}
+.mrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.mcell{background:#f7fbfe;border:1px solid var(--line2);border-radius:12px;padding:12px}
+.mcell .l{font-size:11.5px;color:var(--sub)}
+.mcell .v{font-size:19px;font-weight:800;margin:4px 0 3px}
+.mcell .r{font-size:11.5px}
+.mcell .sp{margin-top:7px;border-top:1px dashed var(--line);padding-top:6px}
+.gbar{height:6px;background:#e4eef6;border-radius:3px;margin-top:7px;overflow:hidden}
+.gbar i{display:block;height:100%;border-radius:3px}
+.sec{margin-bottom:14px}
+.sec h4{font-size:13px;margin:0 0 7px;color:var(--ac);font-weight:700}
+.sec p{margin:0 0 7px;font-size:13.2px;line-height:1.85;color:#3f5466}
+.sec ul{margin:0;padding-left:19px;font-size:13.2px;line-height:1.88;color:#3f5466}
+mark{background:#dceffb;color:#2f6e96;padding:1px 6px;border-radius:5px}
+.empty{color:var(--sub);text-align:center;padding:72px 18px;font-size:14px;line-height:2}
+.empty .big{font-size:40px;display:block;margin-bottom:10px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+tr.r{cursor:pointer}tr.r:hover td{background:#f2f9fe}tr.selrow td{background:#e3f1fb}
+svg.lchart{width:100%;height:auto;display:block;overflow:visible}
+.gl{stroke:#eaf3fa;stroke-width:1}
+.axl{font-size:11px;fill:#8ba3b9}
+.lpath{fill:none;stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+.lpath.dim{stroke-width:1.4;opacity:.4;stroke-dasharray:5 4}
+.ldot{stroke:#fff;stroke-width:1.5}
+.nowline{stroke:#e08a93;stroke-width:1.6;stroke-dasharray:5 4}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.chip{cursor:pointer;font-size:11.5px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--sub);display:flex;align-items:center;gap:5px}
+.chip.on{background:var(--acsoft);color:#2f6e96;border-color:var(--ac2);font-weight:700}
+.chip i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.chiptools{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.chiptools button{font-size:11px;padding:4px 10px}
+.delta{font-size:11px;font-weight:700;padding:1px 6px;border-radius:6px;margin-left:4px}
+.delta.u{background:#e3f3ee;color:#357a66}.delta.d{background:#fceaec;color:#b65f69}.delta.n{background:#eef3f7;color:#8ba3b9}
+.modal{position:fixed;inset:0;background:rgba(40,70,95,.4);display:flex;align-items:center;justify-content:center;z-index:50;padding:22px}
+.mbox{background:#fff;border-radius:18px;max-width:900px;width:100%;max-height:88vh;display:flex;flex-direction:column}
+.mtop{padding:15px 20px;border-bottom:1px solid var(--line);display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.mtop b{flex:1;font-size:15px}
+.mbody{padding:22px 26px;overflow:auto}
+.rep{color:#3f5466;font-size:13.4px;line-height:1.95}
+.rep h2{font-size:19px;margin:0 0 4px;color:#2d3e50}
+.rep h3{font-size:14.5px;margin:20px 0 8px;color:var(--ac);border-left:3px solid var(--ac2);padding-left:10px}
+.rep .meta{color:var(--sub);font-size:12px;margin-bottom:14px}
+.rep table{font-size:12.6px;margin:8px 0}
+.rep th,.rep td{border:1px solid var(--line)}
+.chartbox{border:1px solid #dbeaf6;border-radius:12px;padding:10px 12px 4px;margin:12px 0;background:#fff;page-break-inside:avoid}
+.chartbox .ct{font-size:12.5px;font-weight:700;color:#3d7ca8;margin-bottom:4px}
+.rep .chartbox svg{max-width:100%}
+
+.rep .solbox{background:#f3faff;border:1px solid #cfe7f8;border-radius:10px;padding:12px 16px;margin:8px 0}
+.rep .solbox b{color:#2f6e96}
+.rep .tagk{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:#dcecf9;color:#3d7ca8;margin-right:6px}
+.rep .tagk.s1{background:#fde7ea;color:#b65f69}
+.rep .tagk.s2{background:#fdf0dd;color:#9a6c23}
+.rep .tagk.s3{background:#e3f3ee;color:#357a66}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="bHome">전국 시도별 소비 만족도 <small>KOSIS Open API 대시보드</small></h1>
+  <span id="mode" class="badge">DEMO 데이터</span>
+  <input id="proxy" placeholder="Apps Script 웹앱 URL (.../exec)">
+  <button class="btn" id="bLive">실데이터 연결</button>
+  <button class="ghost" id="bDemo">DEMO 보기</button>
+  <button class="ghost" id="bCsv">CSV</button>
+</header>
+<div id="status">예시 데이터로 표시 중입니다.</div>
+<div class="wrap">
+
+<section id="vHome" class="home">
+  <h2>전국 시도별 소비 만족도</h2>
+  <p>지도에서 시도를 클릭해 종합 분석을 보거나, 아래 지표별 대시보드를 이용하세요.</p>
+  <button class="bigbtn" id="bAnalysis">시도별 소비 분석하기
+    <span class="s">전국 지도에서 시도 클릭 → 3대 지표·추세·격차 원인 분석 + 보고서</span></button>
+  <div class="divider">지표별 대시보드</div>
+  <div class="menu">
+    <div class="mcard" data-k="satis"><div class="ico">🙂</div><div class="t">소비만족도</div>
+      <div class="d">시도별 소비생활 만족도 점수<br>사회조사 기반 지표</div>
+      <div class="m" id="mSatis">—</div><div class="why">사회조사 기반 <b>2년 주기</b>(짝수 연도) 주관적 만족도 · 만족 응답 비율</div><div class="spark" id="spSatis"></div></div>
+    <div class="mcard" data-k="cpi"><div class="ico">🏷️</div><div class="t">소비자물가</div>
+      <div class="d">시도별 소비자물가지수<br>기준시점 = 100</div>
+      <div class="m" id="mCpi">—</div><div class="why">매월 조사 → <b>연평균</b> 지수 · 기준시점 2020=100, 5년마다 개편</div><div class="spark" id="spCpi"></div></div>
+    <div class="mcard" data-k="inc"><div class="ico">💰</div><div class="t">처분가능소득</div>
+      <div class="d">시도별 가구 처분가능소득(천원)<br>세금·사회보험 차감 후</div>
+      <div class="m" id="mInc">—</div><div class="why"><b>연 1회</b> 가계조사 · 경상소득 − 세금·사회보험료 등 비소비지출</div><div class="spark" id="spInc"></div></div>
+  </div>
+</section>
+
+<section id="vDetail" class="hide">
+  <div id="note1" class="notice">※ 현재 화면은 <b>형식 확인용 예시 데이터</b>입니다.</div>
+  <div class="toolbar">
+    <button class="ghost" id="bHome2">← 홈</button>
+    <strong id="dTitle" style="font-size:17px"></strong><span style="flex:1"></span>
+    <label style="font-size:12.3px;color:var(--sub)"><input type="checkbox" id="dShow" checked> 지도 수치</label>
+    <span style="color:var(--sub);font-size:12.5px">연도</span>
+    <div class="years" id="dYears"></div>
+  </div>
+  <div class="player">
+    <button class="playbtn" id="dPlay">▶</button><span class="pl">연도 재생</span>
+    <div class="rangewrap"><input type="range" id="dRange" min="0" max="1" value="0"><div class="ticks" id="dTicks"></div></div>
+    <span class="yearnow" id="dNow">—</span>
+    <span class="pl">속도</span>
+    <select id="dSpeed"><option value="1500">0.5×</option><option value="900" selected>1×</option><option value="500">2×</option><option value="260">4×</option></select>
+    <label style="font-size:11.5px;color:var(--sub)"><input type="checkbox" id="dLoop" checked> 반복</label>
+  </div>
+  <div id="dDoc"></div>
+  <div class="kpis" id="kpis"></div>
+  <div class="split">
+    <div class="card"><h3 id="dMapT">전국 지도</h3>
+      <div class="mapbox" id="dBox"><div class="tip" id="dTip"></div>
+        <div class="mapimg" id="dMap"></div></div>
+      <div class="legend"><span id="dLgA">-</span><div class="grad" id="dLgG"></div><span id="dLgB">-</span></div></div>
+    <div class="card"><h3>시도 순위표<span class="sub" id="dSub"></span></h3>
+      <div class="scroll"><table id="dTbl"></table></div></div>
+  </div>
+  <div class="card" style="margin-top:18px">
+    <h3 id="dTrendT">시도별 추세</h3>
+    <svg class="lchart" id="dChart" viewBox="0 0 900 340" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="chips" id="dChips"></div>
+    <div class="chiptools">
+      <button class="ghost" id="cTop">상위 5개</button>
+      <button class="ghost" id="cBot">하위 5개</button>
+      <button class="ghost" id="cAll">전체</button>
+      <button class="ghost" id="cNone">모두 해제</button>
+    </div>
+  </div>
+</section>
+
+<section id="vAna" class="hide">
+  <div id="note2" class="notice">※ 현재 <b>형식 확인용 예시 데이터</b>입니다.</div>
+  <div class="toolbar">
+    <button class="ghost" id="bHome3">← 홈</button>
+    <strong style="font-size:17px">시도별 소비 분석</strong><span style="flex:1"></span>
+    <label style="font-size:12.3px;color:var(--sub)"><input type="checkbox" id="aShow" checked> 지도 수치</label>
+    <span style="color:var(--sub);font-size:12.3px">연도</span>
+    <div class="years" id="aYears"></div>
+    <button class="btn" id="bRep">📄 보고서</button>
+  </div>
+  <div class="player">
+    <button class="playbtn" id="aPlay">▶</button><span class="pl">연도 재생</span>
+    <div class="rangewrap"><input type="range" id="aRange" min="0" max="1" value="0"><div class="ticks" id="aTicks"></div></div>
+    <span class="yearnow" id="aNow">—</span>
+    <span class="pl">속도</span>
+    <select id="aSpeed"><option value="1500">0.5×</option><option value="900" selected>1×</option><option value="500">2×</option><option value="260">4×</option></select>
+    <label style="font-size:11.5px;color:var(--sub)"><input type="checkbox" id="aLoop" checked> 반복</label>
+  </div>
+  <div class="alayout">
+    <div>
+      <div class="card"><div class="metricsel" id="mSel"></div>
+        <h3 id="aMapT">전국 지도</h3>
+        <div class="mapbox" id="aBox"><div class="tip" id="aTip"></div>
+          <div class="mapimg" id="aMap"></div></div>
+        <div class="legend"><span id="aLgA">-</span><div class="grad" id="aLgG"></div><span id="aLgB">-</span></div></div>
+      <div class="card" style="margin-top:16px"><h3>시도 순위표<span class="sub" id="aSub"></span></h3>
+        <div class="scroll" style="max-height:330px"><table id="aTbl"></table></div></div>
+    </div>
+    <div class="card" id="panel"></div>
+  </div>
+  <div class="card" style="margin-top:18px">
+    <h3 id="aTrendT">선택 시도 추세</h3>
+    <svg class="lchart" id="aChart" viewBox="0 0 900 320" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="chips" id="aChips"></div>
+  </div>
+</section>
+</div>
+
+<div id="modal" class="modal hide"><div class="mbox">
+  <div class="mtop"><b id="repT">분석 보고서</b>
+    <select id="repScope"><option value="region">선택 시도 보고서</option><option value="all">전국 종합 보고서</option></select>
+    <button class="btn" id="bRepPdf">📥 PDF 다운로드</button>
+    <button class="ghost" id="bRepHtml">HTML 저장</button>
+    <button class="ghost" id="bPrint">인쇄/PDF</button>
+    <button class="ghost" id="bRepX">닫기</button></div>
+  <div class="mbody"><div class="rep" id="repBody"></div></div>
+</div></div>
+<script>
+"use strict";
+var META={
+satis:{name:"소비만족도",unit:"점",dec:1,good:1,ramp:[[233,245,253],[58,130,186]],line:"#3a82ba"},
+cpi:{name:"소비자물가",unit:"지수",dec:2,good:-1,ramp:[[253,240,244],[206,120,148]],line:"#ce7894"},
+inc:{name:"처분가능소득",unit:"천원",dec:0,good:1,ramp:[[236,248,243],[82,156,134]],line:"#529c86"}};
+var KEYS=["satis","cpi","inc"];
+var DOC={
+satis:{tag:"2년 주기 · 표본 사회조사",cls:"",
+ def:"가구원이 자신의 <b>소비생활 전반에 대해 느끼는 주관적 만족 수준</b>을 수치화한 지표입니다. 소득·물가 같은 객관 지표가 설명하지 못하는 <b>체감 생활의 질</b>을 보완합니다.",
+ src:"통계청 「사회조사」 (시도 단위 공표, KOSIS 국가통계포털)",
+ cyc:"<b>2년 주기</b> — 사회조사는 10개 부문을 2년 간격으로 순환 조사하며, 소비·가구·소득 부문은 짝수 연도(2016·2018·2020·2022·2024)에 조사됩니다. 따라서 홀수 연도 값은 존재하지 않습니다.",
+ how:["전국 약 1만 9천 표본가구의 <b>13세 이상 가구원</b>을 대상으로 매년 5월경 면접·인터넷 병행 조사",
+      "\u2018귀하의 전반적인 소비생활에 어느 정도 만족하십니까\u2019 문항을 <b>5점 척도</b>(매우 만족 ~ 매우 불만족)로 응답",
+      "<b>만족</b>(매우 만족 + 약간 만족) 응답자 비율을 시도별로 집계하고, 가구 특성별 <b>가중치</b>를 적용해 모집단 추정치로 환산"],
+ fml:"지표값 = (만족 응답 가중 인원 ÷ 유효 응답 가중 인원) × 100",
+ unit:"점(= 만족 응답 비율 %)",range:"값이 <b>클수록</b> 체감 만족도가 높음",
+ cau:"주관적 인식 조사이므로 경기 심리·조사 시점의 사회 분위기에 민감합니다. 또한 표본조사 결과라 시도별 표본 수가 적은 지역(세종·제주 등)은 <b>표본오차</b>가 상대적으로 큽니다."},
+cpi:{tag:"매월 조사 · 연평균 환산",cls:"c",
+ def:"가구가 실제로 구입하는 <b>상품·서비스 가격의 평균 변동</b>을 기준시점과 비교해 지수화한 지표입니다. 같은 소득이라도 물가가 높으면 실질 구매력이 떨어지므로 만족도 해석의 핵심 보정 변수입니다.",
+ src:"통계청 「소비자물가조사」 (시도별 소비자물가지수, KOSIS)",
+ cyc:"<b>매월 작성 → 연평균으로 환산</b>해 수록합니다. 지수의 <b>기준시점(=100)은 5년마다 개편</b>되며 현재는 <b>2020년 = 100</b> 기준입니다. 품목 구성·가중치도 이때 함께 갱신됩니다.",
+ how:["전국 40개 지역의 약 2만 6천 개 소매점·사업체에서 <b>458개 대표품목</b>의 가격을 매월 직접 조사",
+      "품목별 가격비(당월가격 ÷ 기준연도 가격)를 계산",
+      "가계동향조사의 지출액 비중으로 만든 <b>가중치</b>를 적용해 가중평균(라스파이레스식)으로 지수 산출",
+      "시도별 지수는 해당 지역에서 조사된 가격과 전국 공통 가중치를 결합해 작성"],
+ fml:"CPI = Σ(품목 가격비 × 가중치) ÷ Σ(가중치) × 100  (2020년 = 100)",
+ unit:"지수 (기준연도 100)",range:"값이 <b>작을수록</b> 물가 부담이 낮아 소비 여건에 유리",
+ cau:"시도 간 지수를 직접 비교하는 것은 <b>물가 수준</b>의 비교가 아니라 <b>기준연도 대비 상승폭</b>의 비교입니다. 절대 생활비 수준 비교에는 별도의 지역물가 수준 통계가 필요합니다."},
+inc:{tag:"연 1회 · 가계조사 기반",cls:"g",
+ def:"가구의 경상소득에서 세금·사회보험료 등 <b>의무적으로 빠져나가는 지출(비소비지출)을 뺀 뒤 실제로 쓰거나 저축할 수 있는 소득</b>입니다. 소비 여력의 직접적인 크기를 나타냅니다.",
+ src:"통계청 「가계동향조사」 및 「가계금융복지조사」 (시도별 가구당 소득, KOSIS)",
+ cyc:"<b>1년 주기(연간)</b>로 공표됩니다. 가계동향조사는 분기별로 조사해 연간으로 합산하며, 소득 부문 보완을 위한 가계금융복지조사는 매년 1회(3~4월 조사, 연말 공표) 실시됩니다. 조사 시점과 공표 시점 사이에 약 <b>1년의 시차</b>가 있습니다.",
+ how:["표본가구가 가계부·면접을 통해 근로·사업·재산·이전소득을 기록 → <b>경상소득</b> 집계",
+      "경상소득에서 <b>비소비지출</b>(소득세·재산세 등 세금, 국민연금·건강보험 등 사회보험료, 이자비용, 가구간 이전지출)을 차감",
+      "가구원 수·가구 유형별 가중치를 적용해 <b>가구당 월평균(천원)</b> 기준으로 시도별 추정"],
+ fml:"처분가능소득 = 경상소득 − 비소비지출(세금 + 사회보험료 + 이자비용 + 이전지출)",
+ unit:"천원 (가구당 월평균)",range:"값이 <b>클수록</b> 실제 소비 여력이 큼",
+ cau:"<b>명목금액</b>이므로 물가 상승분이 제거되지 않았습니다. 지역 간 실질 비교 시에는 같은 화면의 소비자물가지수로 디플레이트해 해석해야 합니다. 또한 가구당 평균이라 <b>가구원 수</b>가 많은 지역이 높게 나올 수 있습니다."}};
+function docHTML(k){var d=DOC[k],M=META[k];if(!d)return"";
+ return '<div class="doc" data-doc="'+k+'">'+
+ '<div class="dh"><span class="ic">\u2139\ufe0f</span><b>'+M.name+' 지표 설명</b>'+
+ '<span class="tag '+d.cls+'">'+d.tag+'</span><span class="arr">접기 \u25b4</span></div>'+
+ '<div class="db">'+
+ '<h4>개념</h4><p>'+d.def+'</p>'+
+ '<h4>작성 주기</h4><p>'+d.cyc+'</p>'+
+ '<h4>산출 방법</h4><ul>'+d.how.map(function(x){return"<li>"+x+"</li>";}).join("")+'</ul>'+
+ '<span class="fml">'+d.fml+'</span>'+
+ '<div class="meta"><div><div class="k">출처</div><div class="v">'+d.src+'</div></div>'+
+ '<div><div class="k">단위</div><div class="v">'+d.unit+'</div></div>'+
+ '<div><div class="k">해석 방향</div><div class="v">'+d.range+'</div></div></div>'+
+ '<div class="cau"><b>해석 시 유의</b> \u00b7 '+d.cau+'</div>'+
+ '</div></div>';}
+function bindDoc(id){var el=document.getElementById(id);if(!el)return;
+ var h=el.querySelector(".dh");if(!h)return;
+ h.addEventListener("click",function(){var b=el.querySelector(".doc");b.classList.toggle("cl");
+  b.querySelector(".arr").textContent=b.classList.contains("cl")?"자세히 보기 \u25be":"접기 \u25b4";});}
+
+var REGIONS=["경기","서울","인천","강원","충북","충남","세종","대전","경북","대구","울산","경남","부산","전북","광주","전남","제주"];
+var VALID={};REGIONS.forEach(function(r){VALID[r]=1;});
+var PAL=["#5aa9dd","#e08a93","#4e9c88","#e0a85c","#8a7fd1","#4fb3c4","#d279a8","#7fa85c","#c4705a","#5c87c4","#b98fd6","#58a57a","#d9a14a","#6fb0e0","#cf8f72","#79a3b8","#a8639c"];
+var RC={};REGIONS.forEach(function(r,i){RC[r]=PAL[i%PAL.length];});
+var SMAP={
+경기:{d:"M160,105L186,78L222,62L262,54L310,51L350,57L374,70L379,96L376,126L370,152L352,178L366,205L358,228L336,249L300,264L262,266L228,258L203,240L188,214L174,186L158,160L150,132Z",c:[268,150]},
+서울:{d:"M206,176L222,167L244,165L264,170L273,180L271,193L256,202L236,204L218,199L207,189Z",c:[239,185]},
+인천:{d:"M133,180L148,166L170,160L190,167L201,180L202,196L194,212L176,219L155,217L139,206L130,193Z",c:[166,190]},
+강원:{d:"M374,70L404,56L442,44L484,36L524,32L564,40L600,54L630,74L652,100L664,130L668,158L652,182L622,198L586,208L548,214L508,219L470,224L432,230L400,234L370,228L366,205L352,178L370,152L376,126L379,96Z",c:[520,130]},
+충북:{d:"M370,228L400,234L432,230L470,224L492,238L508,256L516,278L510,300L496,320L478,340L460,360L440,376L418,382L398,372L384,352L374,328L366,304L352,282L342,260L336,249L358,228Z",c:[432,300]},
+충남:{d:"M203,240L228,258L262,266L300,264L336,249L342,260L352,282L366,304L352,322L332,340L314,358L300,378L282,392L258,398L234,394L212,382L192,364L176,342L166,318L166,292L178,268L190,252Z",c:[256,324]},
+세종:{d:"M286,290L302,283L318,288L324,300L318,313L302,318L288,311L282,300Z",c:[303,300]},
+대전:{d:"M314,322L332,314L350,318L358,331L353,346L336,353L318,348L310,335Z",c:[334,333]},
+경북:{d:"M508,219L548,214L586,208L622,198L652,182L668,158L684,190L694,226L698,262L696,298L686,334L670,368L650,398L626,420L598,434L568,440L538,436L514,422L500,402L492,378L488,354L478,340L496,320L510,300L516,278Z",c:[600,310]},
+대구:{d:"M532,396L554,386L578,388L592,402L590,422L574,436L550,438L534,426L528,410Z",c:[560,412]},
+울산:{d:"M624,440L644,430L664,434L676,448L674,466L660,478L640,479L626,468L620,453Z",c:[648,455]},
+경남:{d:"M440,376L460,360L478,340L488,354L492,378L500,402L514,422L538,436L568,440L598,434L626,420L644,430L664,434L674,466L668,488L652,506L628,520L600,532L570,542L538,550L506,550L478,542L456,526L438,504L428,478L424,450L428,420L434,396Z",c:[540,470]},
+부산:{d:"M602,500L622,490L644,492L656,506L654,524L638,536L616,536L602,524L596,511Z",c:[626,513]},
+전북:{d:"M234,394L258,398L282,392L300,378L314,358L332,340L352,322L366,304L374,328L384,352L398,372L418,382L434,396L428,420L424,450L428,478L406,486L378,492L348,497L318,500L290,500L264,493L244,480L230,462L222,440L222,416Z",c:[320,432]},
+광주:{d:"M212,496L232,488L252,492L262,506L258,523L240,531L220,527L209,513Z",c:[235,509]},
+전남:{d:"M222,440L230,462L244,480L264,493L290,500L318,500L348,497L378,492L406,486L428,478L438,504L456,526L452,548L440,570L424,592L404,612L380,630L352,644L322,652L292,654L262,648L234,636L210,618L192,596L180,572L176,546L180,520L192,494L206,470Z",c:[316,566]},
+제주:{d:"M106,790L126,778L152,772L182,771L208,777L224,788L228,800L220,812L198,821L170,825L142,823L118,815L104,803Z",c:[166,797]}};
+/* ===== 지도 이미지 설정 =====
+ MAP_IMAGE_SRC : 1순위 - HTML과 같은 폴더의 "map.png" (영문명 권장: GitHub Pages 한글 파일명 NFC/NFD 문제 회피) (공유 시 PNG를 함께 두면 누구나 보임)
+ MAP_IMAGE_ALT : 2순위 - 로컬 절대경로 (작성자 PC에서만 동작)                                   */
+var MAP_IMAGE_SRC="map.png";
+/* 폴백: 영문명 실패 시 한글 파일명(NFC → NFD 순)으로 재시도 */
+var MAP_IMAGE_FALLBACKS=["전국지도.png","전국지도.png","./map.png"];
+var MAP_W=390,MAP_H=500;
+/* 이미지 위 시도 표시 위치(이미지 좌표, 390x500 기준) */
+var MPOS={서울:[128,124],인천:[97,130],경기:[160,100],강원:[262,98],충북:[218,192],세종:[168,214],대전:[182,240],충남:[128,216],
+ 전북:[152,292],광주:[128,342],전남:[122,382],경북:[280,228],대구:[266,290],울산:[322,312],부산:[300,350],경남:[232,326],제주:[116,470]};
+var OUT={세종:[-10,250],대전:[-10,330],광주:[-10,580],대구:[756,350],울산:[770,430],부산:[760,590]};
+var PROF={
+서울:["대도시 고비용·고선택형",["외식·문화·여가 등 선택적 소비 비중이 높음","주거비가 가계 지출에서 차지하는 비중이 전국 최상위권","상업·여가 인프라 접근성이 넓어 소비 선택지가 많음"]],
+부산:["광역시 생활밀착형",["관광·외식업 기반의 서비스 소비가 활발","고령 가구 비중이 높아 보건·의료 지출 비중 상승","주거비 부담은 수도권 대비 완만"]],
+대구:["내수 기반 절약형",["소득 증가 속도가 완만해 필수재 중심 지출 구조","외식·오락 등 선택 소비 탄력이 비교적 작음","도심 상권 집중도가 높아 접근성은 양호"]],
+인천:["수도권 배후 실용형",["서울 통근 가구가 많아 교통비 지출 비중이 큼","대형 유통시설 접근성이 좋아 생필품 부담이 낮은 편","신도시·구도심 간 소비 격차가 큼"]],
+광주:["중핵도시 균형형",["주거비 부담이 낮아 가처분 여력이 확보됨","교육·문화 소비 수요가 꾸준","지역 상권 중심의 생활 소비 비중이 높음"]],
+대전:["행정·연구 안정형",["공공·연구기관 종사자 비중이 높아 소득 변동성이 작음","교육비 지출 비중이 전국 평균 이상","생활 인프라 대비 물가 수준이 안정적"]],
+울산:["고소득 제조업형",["제조업 임금 기반으로 가구 소득 수준이 높음","내구재·자동차 관련 지출 비중이 큼","여가·문화 인프라는 소득 대비 제한적"]],
+세종:["신도시 고소득 젊은형",["30~40대 공공부문 가구 비중이 높아 소득이 안정적","신규 주거지 중심이라 주거 만족도가 높음","상업 인프라 확충 중이라 역외 소비 발생"]],
+경기:["수도권 광역 다층형",["도시권·농촌권 혼재로 지역 내 소비 격차가 큼","서울 접근성이 높아 역외 소비가 활발","주거비 상승이 소비 여력을 일부 잠식"]],
+강원:["관광·고령 혼합형",["관광 성수기와 비수기의 소비 변동폭이 큼","고령·1인 가구 비중이 높아 필수재 중심 구조","생활 인프라 접근에 이동 비용이 추가됨"]],
+충북:["산업단지 배후형",["제조업 단지 주변의 안정적 근로소득 기반","주거비 부담이 낮아 지출 여력은 확보된 편","광역 상업시설이 적어 인접 도시로 소비 유출"]],
+충남:["제조·농촌 병존형",["산업단지권과 농촌권의 소득 구조가 이원화","농가 소득의 계절성이 소비 변동을 키움","대형 상권까지 이동 거리가 긴 지역이 많음"]],
+전북:["농업 기반 저비용형",["물가 수준이 전국 하위권으로 생활비 부담이 작음","소득 수준이 낮아 선택적 소비 여력이 제한","고령 가구 중심의 보건·식료품 지출 비중"]],
+전남:["농어촌 고령형",["1차 산업 비중이 높아 소득 변동성이 큼","고령화율이 전국 최상위권으로 의료 지출 상승","문화·여가 인프라 접근성이 가장 제약적"]],
+경북:["광역 분산형",["시·군 간 거리가 멀어 소비 인프라가 분산","제조업권과 농촌권의 소득 격차가 큼","인구 감소로 지역 상권이 축소되는 추세"]],
+경남:["제조업 광역형",["조선·기계 업황에 따라 소비 심리가 민감","중간 수준의 물가와 소득으로 균형적 구조","창원·김해 등 도시권에 소비가 집중"]],
+제주:["관광 의존 고물가형",["물류비·관광 수요로 생활물가가 전국 최상위권","관광업 종사 가구 비중이 높아 소득 계절성이 큼","식료품·주거비 부담이 체감 만족도를 낮춤"]]};
+var DB={
+satis:{서울:17.6,부산:14.2,대구:13.5,인천:14.8,광주:15.1,대전:15.9,울산:16.4,세종:18.2,경기:16.1,강원:13.9,충북:13.2,충남:13.6,전북:12.8,전남:12.4,경북:12.9,경남:13.8,제주:15.4},
+cpi:{서울:115.8,부산:114.6,대구:114.1,인천:114.9,광주:114.3,대전:114.7,울산:113.8,세종:113.5,경기:115.2,강원:114.4,충북:114,충남:114.2,전북:113.9,전남:114.1,경북:113.7,경남:113.6,제주:116.3},
+inc:{서울:4720,부산:3980,대구:3910,인천:4180,광주:3960,대전:4090,울산:4560,세종:4830,경기:4610,강원:3740,충북:3880,충남:4020,전북:3620,전남:3690,경북:3700,경남:3950,제주:3860}};
+var DY={satis:["2024","2022","2020","2018","2016"],
+cpi:["2025","2024","2023","2022","2021","2020","2019","2018","2017"],
+inc:["2024","2023","2022","2021","2020","2019","2018","2017","2016"]};
+function hs(s){var x=0;for(var i=0;i<s.length;i++)x=(x*31+s.charCodeAt(i))%100000;return (x%1000)/1000;}
+function dv(k,r,y,L){var b=DB[k][r],g=(+L)-(+y),j=hs(k+r+y)-.5;
+ if(k==="cpi")return +(b-g*2.1+j*.8).toFixed(2);
+ if(k==="inc")return Math.round(b*Math.pow(.968,g)+j*90);
+ return +(b-g*.25+j*1.1).toFixed(1);}
+function buildDemo(){var o={};KEYS.forEach(function(k){var ys=DY[k],L=ys[0],rows=[];
+ ys.forEach(function(y){REGIONS.forEach(function(r){
+  rows.push({C1_NM:r,ITM_ID:k==="satis"?"SAT":"T",ITM_NM:k==="satis"?"만족(매우+약간 만족 비율)":META[k].name,PRD_DE:y,DT:String(dv(k,r,y,L))});});});
+ o[k]=rows;});return o;}
+
+var RAW={},VIEW=null,YEAR=null,YEARS=[],DEMO=true;
+var AM="satis",AY=null,AYS=[],SEL=null,STAT={},DSEL=null,TS={},ATS={satis:1,cpi:1,inc:1};
+var dT=null,aT=null,C={};
+function $(i){return document.getElementById(i);}
+function log(m,c){$("status").innerHTML='<span class="'+(c||"")+'">'+m+'</span>';}
+function sh(n){if(!n)return"";var s=String(n).replace(/특별자치도|특별자치시|광역시|특별시/g,"");
+ var m={"충청북":"충북","충청남":"충남","전라북":"전북","전라남":"전남","경상북":"경북","경상남":"경남"};
+ for(var k in m)if(s.indexOf(k)===0)return m[k];
+ for(var i=0;i<REGIONS.length;i++)if(s.indexOf(REGIONS[i])===0)return REGIONS[i];
+ return s.replace(/도$/,"").trim();}
+var SKIP=/^(전국|계|합계|전체|평균)$/;
+function nm(rows){return (rows||[]).map(function(r){
+ return {region:sh(r.C1_NM||""),item:r.ITM_NM||"",id:(r.ITM_ID||"").trim(),
+  year:String(r.PRD_DE||"").slice(0,4),value:(r.DT==null||r.DT===""||r.DT==="-")?null:parseFloat(r.DT)};
+ }).filter(function(d){return d.value!=null&&!isNaN(d.value)&&d.region&&!SKIP.test(d.region);});}
+function ser(k,y){var ck=k+"@"+y;if(C[ck])return C[ck];
+ var a=nm(RAW[k]);
+ /* 소비만족도: 중계서버가 만든 SAT(매우+약간 만족 합) 항목만 사용.
+    T00(계)는 응답비율 합계라 항상 100 이므로 절대 사용하지 않는다. */
+ var f=k==="satis"?function(d){return d.id!=="T00"&&d.value>0&&d.value<100&&(d.id==="SAT"||/만족\(매우/.test(d.item));}:function(){return true;};
+ var rows=a.filter(function(d){return d.year===y&&f(d);});
+ if(!rows.length&&k!=="satis")rows=a.filter(function(d){return d.year===y;});
+ var m={};rows.forEach(function(d){if(m[d.region]===undefined)m[d.region]=d.value;});
+ var o=Object.keys(m).map(function(r){return{region:r,value:m[r]};})
+  .filter(function(d){return VALID[d.region];}).sort(function(x,z){return z.value-x.value;});
+ C[ck]=o;return o;}
+function yrs(k){var ck="Y@"+k;if(C[ck])return C[ck];
+ var s={},o=[];nm(RAW[k]).forEach(function(d){if(d.year&&!s[d.year]){s[d.year]=1;o.push(d.year);}});
+ o.sort().reverse();C[ck]=o;return o;}
+function yrsA(k){return yrs(k).slice().reverse();}
+function tr(k,r){var ck="T@"+k+"@"+r;if(C[ck])return C[ck];
+ var o=[];yrsA(k).forEach(function(y){var s=ser(k,y);
+  for(var i=0;i<s.length;i++)if(s[i].region===r){o.push({year:y,value:s[i].value});return;}});
+ C[ck]=o;return o;}
+function mtr(k){var ck="M@"+k;if(C[ck])return C[ck];
+ var o=yrsA(k).map(function(y){var s=ser(k,y),v=s.map(function(d){return d.value;});
+  return{year:y,value:v.length?v.reduce(function(a,b){return a+b;},0)/v.length:null};})
+  .filter(function(d){return d.value!=null;});C[ck]=o;return o;}
+function ny(k,y){var ys=yrs(k);if(!ys.length)return null;
+ return ys.reduce(function(a,b){return Math.abs(+b-+y)<Math.abs(+a-+y)?b:a;});}
+function F(k,v){return v==null?"-":v.toLocaleString(undefined,{minimumFractionDigits:META[k].dec,maximumFractionDigits:META[k].dec});}
+function RMP(k,t){var a=META[k].ramp[0],b=META[k].ramp[1],e=.12+.88*Math.max(0,Math.min(1,t));
+ return "rgb("+a.map(function(v,i){return Math.round(v+(b[i]-v)*e);}).join(",")+")";}
+
+function spark(p,c,w,h){if(!p||p.length<2)return'<svg width="'+w+'" height="'+h+'"></svg>';
+ var v=p.map(function(x){return x.value;}),mn=Math.min.apply(null,v),mx=Math.max.apply(null,v),rg=(mx-mn)||1,q=3;
+ var xy=p.map(function(x,i){return[q+i*(w-q*2)/(p.length-1),h-q-((x.value-mn)/rg)*(h-q*2)];});
+ var d=xy.map(function(x,i){return(i?"L":"M")+x[0].toFixed(1)+","+x[1].toFixed(1);}).join(" ");
+ var ar=d+" L"+xy[xy.length-1][0].toFixed(1)+","+(h-q)+" L"+xy[0][0].toFixed(1)+","+(h-q)+" Z";
+ var l=xy[xy.length-1];
+ return'<svg width="100%" height="'+h+'" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" style="display:block">'+
+ '<path d="'+ar+'" fill="'+c+'" opacity=".12"></path><path d="'+d+'" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linejoin="round"></path>'+
+ '<circle cx="'+l[0].toFixed(1)+'" cy="'+l[1].toFixed(1)+'" r="2.6" fill="'+c+'"></circle></svg>';}
+function dlt(p,g){if(!p||p.length<2)return'<span class="delta n">–</span>';
+ var a=p[p.length-2].value,b=p[p.length-1].value;if(!a)return'<span class="delta n">–</span>';
+ var pc=(b-a)/Math.abs(a)*100,u=pc>=.05,dn=pc<=-.05;
+ var cl=u?(g>0?"u":"d"):dn?(g>0?"d":"u"):"n";
+ return'<span class="delta '+cl+'">'+(u?"▲":dn?"▼":"–")+" "+Math.abs(pc).toFixed(1)+"%</span>";}
+
+function chart(o){var sv=$(o.id),W=900,H=o.h||340,L=o.ml||62,R=72,T=16,B=36;
+ var ls=(o.series||[]).filter(function(s){return s.points&&s.points.length;});
+ if(!ls.length){sv.innerHTML='<text x="450" y="'+(H/2)+'" class="axl" text-anchor="middle">표시할 계열을 선택하세요</text>';return;}
+ var ys={},yr=[];ls.forEach(function(s){s.points.forEach(function(p){if(!ys[p.year]){ys[p.year]=1;yr.push(p.year);}});});
+ yr.sort();
+ var vn=Infinity,vx=-Infinity;
+ ls.forEach(function(s){s.points.forEach(function(p){var v=o.norm?p.n:p.value;if(v<vn)vn=v;if(v>vx)vx=v;});});
+ var pd=(vx-vn)*.12||1;vn-=pd;vx+=pd;
+ var X=function(y){var i=yr.indexOf(y);return L+(yr.length<2?(W-L-R)/2:i*(W-L-R)/(yr.length-1));};
+ var Y=function(v){return T+(H-T-B)*(1-(v-vn)/((vx-vn)||1));};
+ var s="";
+ for(var g=0;g<=4;g++){var vy=vn+(vx-vn)*g/4,py=Y(vy);
+  s+='<line class="gl" x1="'+L+'" y1="'+py.toFixed(1)+'" x2="'+(W-R)+'" y2="'+py.toFixed(1)+'"></line>'+
+     '<text class="axl" x="'+(L-8)+'" y="'+(py+4).toFixed(1)+'" text-anchor="end">'+(o.fmt?o.fmt(vy):vy.toFixed(1))+'</text>';}
+ yr.forEach(function(y){var px=X(y);
+  s+='<line class="gl" x1="'+px.toFixed(1)+'" y1="'+T+'" x2="'+px.toFixed(1)+'" y2="'+(H-B)+'"></line>'+
+     '<text class="axl" x="'+px.toFixed(1)+'" y="'+(H-B+20)+'" text-anchor="middle">'+y+'</text>';});
+ if(o.now&&yr.indexOf(o.now)>=0){var nx=X(o.now);
+  s+='<line class="nowline" x1="'+nx.toFixed(1)+'" y1="'+T+'" x2="'+nx.toFixed(1)+'" y2="'+(H-B)+'"></line>'+
+     '<text class="axl" x="'+nx.toFixed(1)+'" y="'+(T-4)+'" text-anchor="middle" fill="#e08a93" font-weight="700">'+o.now+'</text>';}
+ ls.forEach(function(sr){
+  var pt=sr.points.map(function(p){return[X(p.year),Y(o.norm?p.n:p.value)];});
+  var d=pt.map(function(p,i){return(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" ");
+  s+='<path class="lpath'+(sr.dim?" dim":"")+'" d="'+d+'" stroke="'+sr.color+'"></path>';
+  if(!sr.dim)pt.forEach(function(p,i){
+   s+='<circle class="ldot" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.2" fill="'+sr.color+'"><title>'+
+    sr.name+" "+sr.points[i].year+": "+(o.rf?o.rf(sr.points[i].value):sr.points[i].value)+'</title></circle>';});
+  var lp=pt[pt.length-1];
+  s+='<text class="axl" x="'+(lp[0]+7)+'" y="'+(lp[1]+4).toFixed(1)+'" fill="'+sr.color+'" font-weight="700">'+sr.name+'</text>';});
+ sv.innerHTML=s;}
+
+function drawMap(o){var mn=o.min,mx=o.max,B=o.by,k=o.key;
+ var s='<img src="'+MAP_IMAGE_SRC+'" alt="전국지도" onerror="var i=+(this.dataset.f||0);if(i<MAP_IMAGE_FALLBACKS.length){this.dataset.f=i+1;this.src=MAP_IMAGE_FALLBACKS[i];}">';
+ s+='<svg class="kov" viewBox="0 0 '+MAP_W+' '+MAP_H+'" preserveAspectRatio="none">';
+ REGIONS.forEach(function(r){var c=MPOS[r];if(!c)return;
+  var d=B[r],t=(d&&mx!==mn)?(d.value-mn)/(mx-mn):(d?.5:0),col=d?RMP(k,t):"#e6eef5";
+  var txt=o.show&&d?F(k,d.value):"",w=Math.max(r.length*12,txt.length*7)+10;
+  s+='<rect class="mbg" x="'+(c[0]-w/2)+'" y="'+(c[1]+9)+'" width="'+w+'" height="'+(txt?30:16)+'" rx="4"></rect>';
+  s+='<circle class="mk prov'+(o.sel===r?" sel":"")+'" cx="'+c[0]+'" cy="'+c[1]+'" r="8" fill="'+col+'" data-r="'+r+'"></circle>';
+  s+='<text class="mlabel" x="'+c[0]+'" y="'+(c[1]+21)+'">'+r+'</text>';
+  if(txt)s+='<text class="mvalue" x="'+c[0]+'" y="'+(c[1]+35)+'">'+txt+'</text>';});
+ s+='</svg>';
+ var sv=$(o.id);sv.innerHTML=s;
+ var tp=$(o.tip),bx=$(o.box);
+ Array.prototype.forEach.call(sv.querySelectorAll(".prov"),function(p){
+  p.addEventListener("mousemove",function(e){
+   var r=p.getAttribute("data-r"),b=bx.getBoundingClientRect(),h='<b style="font-size:14px">'+r+'</b><br>';
+   if(o.all){h+=KEYS.map(function(kk){var d=STAT[kk]&&STAT[kk].map[r];
+    return d?META[kk].name+' <b>'+F(kk,d.value)+'</b> ('+d.rank+'위)':META[kk].name+' -';}).join("<br>");}
+   else{var d=B[r];h+=d?META[k].name+' <b>'+F(k,d.value)+'</b> '+META[k].unit+' ('+d.rank+'위)':"데이터 없음";}
+   var t2=tr(k,r);if(t2.length>1)h+='<div style="width:110px;margin-top:5px">'+spark(t2,META[k].line,110,26)+'</div>';
+   tp.innerHTML=h;tp.style.display="block";
+   tp.style.left=Math.min(e.clientX-b.left+14,b.width-200)+"px";
+   tp.style.top=(e.clientY-b.top+14)+"px";});
+  p.addEventListener("mouseleave",function(){tp.style.display="none";});
+  if(o.click)p.addEventListener("click",function(){o.click(p.getAttribute("data-r"));});});}
+function lg(k,mn,mx,g,a,b){
+ $(g).style.background="linear-gradient(90deg,"+[0,.25,.5,.75,1].map(function(t){return RMP(k,t);}).join(",")+")";
+ $(a).textContent="낮음 "+F(k,mn);$(b).textContent=F(k,mx)+" 높음";}
+
+function stop(w){if(w==="d"&&dT){clearInterval(dT);dT=null;$("dPlay").textContent="▶";$("dPlay").classList.remove("on");}
+ if(w==="a"&&aT){clearInterval(aT);aT=null;$("aPlay").textContent="▶";$("aPlay").classList.remove("on");}}
+function sync(w,ys,cur){var rg=$(w==="d"?"dRange":"aRange"),i=ys.indexOf(cur);
+ if(i<0)i=ys.length-1;rg.min=0;rg.max=Math.max(ys.length-1,0);rg.value=i;
+ $(w==="d"?"dNow":"aNow").textContent=cur?cur+"년":"—";
+ $(w==="d"?"dTicks":"aTicks").innerHTML=ys.length?'<span>'+ys[0]+'</span><span>'+ys[ys.length-1]+'</span>':"";}
+function play(w){var D=w==="d";
+ if((D&&dT)||(!D&&aT)){stop(w);return;}
+ var ys=(D?YEARS:AYS).slice().reverse();if(ys.length<2)return;
+ var b=$(D?"dPlay":"aPlay");b.textContent="❚❚";b.classList.add("on");
+ var sp=parseInt($(D?"dSpeed":"aSpeed").value,10)||900;
+ var st=function(){var cur=D?YEAR:AY,i=ys.indexOf(cur)+1;
+  if(i>=ys.length){if($(D?"dLoop":"aLoop").checked)i=0;else{stop(w);return;}}
+  if(D){YEAR=ys[i];rDetail();}else{AY=ys[i];rAna();}};
+ var t=setInterval(st,sp);if(D)dT=t;else aT=t;}
+
+function home(){stop("d");stop("a");VIEW=null;
+ $("vHome").classList.remove("hide");$("vDetail").classList.add("hide");$("vAna").classList.add("hide");}
+function openV(k){if(!(RAW[k]||[]).length){alert(META[k].name+" 데이터가 비어 있습니다.");return;}
+ stop("a");VIEW=k;YEARS=yrs(k);YEAR=YEARS[0];DSEL=null;
+ TS={};ser(k,YEAR).slice(0,5).forEach(function(d){TS[d.region]=1;});
+ $("vHome").classList.add("hide");$("vAna").classList.add("hide");$("vDetail").classList.remove("hide");
+ $("note1").classList.toggle("hide",!DEMO);$("dTitle").textContent=META[k].name;
+ $("dYears").innerHTML=YEARS.map(function(y){return'<button class="ybtn" data-y="'+y+'">'+y+'</button>';}).join("");
+ Array.prototype.forEach.call($("dYears").children,function(b){
+  b.addEventListener("click",function(){stop("d");YEAR=b.getAttribute("data-y");rDetail();});});
+ rDetail();}
+function dpick(r){DSEL=(DSEL===r?null:r);if(DSEL)TS[DSEL]=1;rDetail();}
+
+function rDetail(){var M=META[VIEW],dt=ser(VIEW,YEAR);
+ $("dDoc").innerHTML=docHTML(VIEW);bindDoc("dDoc");
+ Array.prototype.forEach.call($("dYears").children,function(b){b.classList.toggle("on",b.getAttribute("data-y")===YEAR);});
+ sync("d",YEARS.slice().reverse(),YEAR);
+ var v=dt.map(function(d){return d.value;});
+ var av=v.length?v.reduce(function(a,b){return a+b;},0)/v.length:null;
+ var py=YEARS[YEARS.indexOf(YEAR)+1]||null,pr={};
+ if(py)ser(VIEW,py).forEach(function(d,i){pr[d.region]=i+1;});
+ $("kpis").innerHTML=[["기준 연도",YEAR+"년"],["대상 시도",dt.length+"개"],["전국 평균",F(VIEW,av)],
+  ["최고",dt[0]?dt[0].region+" "+F(VIEW,dt[0].value):"-"],
+  ["최저",dt.length?dt[dt.length-1].region+" "+F(VIEW,dt[dt.length-1].value):"-"]]
+  .map(function(p){return'<div class="kpi"><div class="l">'+p[0]+'</div><div class="v" style="font-size:'+(String(p[1]).length>9?"17px":"22px")+'">'+p[1]+'</div></div>';}).join("");
+ $("dMapT").innerHTML=YEAR+'년 '+M.name+' 전국 지도 <span class="sub">단위 '+M.unit+' · 클릭 시 추세 추가</span>';
+ var mx=Math.max.apply(null,v),mn=Math.min.apply(null,v),by={};
+ dt.forEach(function(d,i){by[d.region]={value:d.value,rank:i+1};});
+ drawMap({id:"dMap",box:"dBox",tip:"dTip",key:VIEW,by:by,min:mn,max:mx,show:$("dShow").checked,sel:DSEL,click:dpick});
+ lg(VIEW,mn,mx,"dLgG","dLgA","dLgB");
+ $("dSub").textContent=py?" "+py+"년 대비 순위 변동":"";
+ $("dTbl").innerHTML='<tr><th>순위</th><th>시도</th><th>'+M.name+'</th><th>추세</th><th>평균대비</th></tr>'+
+  dt.map(function(d,i){var t=mx===mn?.5:(d.value-mn)/(mx-mn),w=mx===mn?100:t*100;
+   var df=av?((d.value-av)/av*100):0,p=pr[d.region],mv="";
+   if(p){var c=p-(i+1);mv=c>0?'<span class="delta u">▲'+c+'</span>':c<0?'<span class="delta d">▼'+(-c)+'</span>':'<span class="delta n">–</span>';}
+   return'<tr class="r'+(DSEL===d.region?" selrow":"")+'" data-r="'+d.region+'">'+
+   '<td><span class="rank '+(i<3?"g"+(i+1):"")+'">'+(i+1)+'</span>'+mv+'</td>'+
+   '<td><span class="sw" style="background:'+RMP(VIEW,t)+'"></span>'+d.region+'<span class="bar" style="width:'+Math.max(w,3)+'%"></span></td>'+
+   '<td>'+F(VIEW,d.value)+'</td><td style="width:92px;padding:4px 6px">'+spark(tr(VIEW,d.region),RC[d.region],86,24)+'</td>'+
+   '<td style="color:'+(df>=0?"var(--up)":"var(--dn)")+'">'+(df>=0?"+":"")+df.toFixed(1)+'%</td></tr>';}).join("");
+ Array.prototype.forEach.call($("dTbl").querySelectorAll("tr.r"),function(t){
+  t.addEventListener("click",function(){dpick(t.getAttribute("data-r"));});});
+ rTrend();}
+
+function rTrend(){var M=META[VIEW],s=[];
+ REGIONS.forEach(function(r){if(!TS[r])return;var p=tr(VIEW,r);if(p.length)s.push({name:r,color:RC[r],points:p});});
+ var m=mtr(VIEW);if(m.length)s.push({name:"전국평균",color:"#9fb3c4",points:m,dim:1});
+ $("dTrendT").innerHTML=M.name+' 연도별 추세 <span class="sub">단위 '+M.unit+' · 칩으로 시도 선택 · 분홍 점선=현재 연도</span>';
+ chart({id:"dChart",h:340,series:s,now:YEAR,fmt:function(v){return F(VIEW,v);},rf:function(v){return F(VIEW,v);}});
+ $("dChips").innerHTML=ser(VIEW,YEAR).map(function(d){
+  return'<span class="chip'+(TS[d.region]?" on":"")+'" data-r="'+d.region+'"><i style="background:'+RC[d.region]+'"></i>'+d.region+'</span>';}).join("");
+ Array.prototype.forEach.call($("dChips").children,function(c){
+  c.addEventListener("click",function(){var r=c.getAttribute("data-r");
+   if(TS[r])delete TS[r];else TS[r]=1;rTrend();});});}
+
+function hsum(){[["satis","mSatis","spSatis"],["cpi","mCpi","spCpi"],["inc","mInc","spInc"]].forEach(function(p){
+ var k=p[0],ys=yrs(k);
+ if(!ys.length){$(p[1]).textContent="데이터 없음";return;}
+ var d=ser(k,ys[0]),m=mtr(k);
+ $(p[1]).textContent=d.length?ys[0]+"년 1위 "+d[0].region+" · "+ys.length+"개 연도":ys[0]+"년";
+ $(p[2]).innerHTML='<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--sub);margin-bottom:3px"><span>전국평균 '+
+  (m.length?m[0].year+"→"+m[m.length-1].year:"")+'</span>'+dlt(m,META[k].good)+'</div>'+spark(m,META[k].line,220,36);});}
+
+function csv(){if(!VIEW){alert("지표를 선택한 뒤 내려받으세요.");return;}
+ var ys=yrsA(VIEW),h="\uFEFF시도,"+ys.join(",")+"\n";
+ var b=REGIONS.map(function(r){var m={};tr(VIEW,r).forEach(function(p){m[p.year]=p.value;});
+  return r+","+ys.map(function(y){return m[y]!=null?m[y]:"";}).join(",");}).join("\n");
+ var a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([h+b],{type:"text/csv"}));
+ a.download=VIEW+"_추세"+(DEMO?"_demo":"")+".csv";a.click();}
+
+function openA(){if(!Object.keys(RAW).length){alert("데이터가 없습니다.");return;}
+ stop("d");$("vHome").classList.add("hide");$("vDetail").classList.add("hide");$("vAna").classList.remove("hide");
+ $("note2").classList.toggle("hide",!DEMO);
+ AYS=yrs("satis");if(!AY||AYS.indexOf(AY)<0)AY=AYS[0];rAna();}
+function cstat(){STAT={};
+ KEYS.forEach(function(k){var y=ny(k,AY);if(!y)return;var s=ser(k,y);if(!s.length)return;
+  var v=s.map(function(d){return d.value;});
+  var me=v.reduce(function(a,b){return a+b;},0)/v.length;
+  var sd=Math.sqrt(v.reduce(function(a,b){return a+Math.pow(b-me,2);},0)/v.length)||1;
+  var m={};s.forEach(function(d,i){m[d.region]={value:d.value,rank:i+1,z:(d.value-me)/sd};});
+  STAT[k]={year:y,list:s,map:m,mean:me,n:s.length,min:Math.min.apply(null,v),max:Math.max.apply(null,v)};});}
+function rAna(){cstat();sync("a",AYS.slice().reverse(),AY);
+ $("aYears").innerHTML=AYS.map(function(y){return'<button class="ybtn'+(y===AY?" on":"")+'" data-y="'+y+'">'+y+'</button>';}).join("");
+ Array.prototype.forEach.call($("aYears").children,function(b){
+  b.addEventListener("click",function(){stop("a");AY=b.getAttribute("data-y");rAna();});});
+ $("mSel").innerHTML=KEYS.map(function(k){return'<button class="mbtn'+(k===AM?" on":"")+'" data-k="'+k+'">'+META[k].name+'</button>';}).join("");
+ Array.prototype.forEach.call($("mSel").children,function(b){
+  b.addEventListener("click",function(){AM=b.getAttribute("data-k");rAna();});});
+
+ var st=STAT[AM];
+ if(st){$("aMapT").innerHTML=st.year+'년 '+META[AM].name+' 전국 지도 <span class="sub">클릭 시 분석·추세</span>';
+  drawMap({id:"aMap",box:"aBox",tip:"aTip",key:AM,by:st.map,min:st.min,max:st.max,show:$("aShow").checked,sel:SEL,click:apick,all:1});
+  lg(AM,st.min,st.max,"aLgG","aLgA","aLgB");
+  $("aSub").textContent=" "+st.year+"년 · "+META[AM].name;
+  $("aTbl").innerHTML='<tr><th>순위</th><th>시도</th><th>'+META[AM].name+'</th><th>추세</th><th>평균대비</th></tr>'+
+   st.list.map(function(d,i){var t=st.max===st.min?.5:(d.value-st.min)/(st.max-st.min);
+    var df=(d.value-st.mean)/st.mean*100;
+    return'<tr class="r'+(SEL===d.region?" selrow":"")+'" data-r="'+d.region+'">'+
+    '<td><span class="rank '+(i<3?"g"+(i+1):"")+'">'+(i+1)+'</span></td>'+
+    '<td><span class="sw" style="background:'+RMP(AM,t)+'"></span>'+d.region+'</td>'+
+    '<td>'+F(AM,d.value)+'</td><td style="width:80px;padding:4px 6px">'+spark(tr(AM,d.region),RC[d.region],74,22)+'</td>'+
+    '<td style="color:'+(df>=0?"var(--up)":"var(--dn)")+'">'+(df>=0?"+":"")+df.toFixed(1)+'%</td></tr>';}).join("");
+  Array.prototype.forEach.call($("aTbl").querySelectorAll("tr.r"),function(t){
+   t.addEventListener("click",function(){apick(t.getAttribute("data-r"));});});}
+ rPanel();rATrend();}
+function apick(r){SEL=(SEL===r?null:r);rAna();}
+
+function rATrend(){if(!SEL){
+  $("aTrendT").innerHTML='선택 시도 추세 <span class="sub">지도나 표에서 시도를 선택하세요</span>';
+  $("aChart").innerHTML='<text x="450" y="160" class="axl" text-anchor="middle">시도를 선택하면 3대 지표 추세가 표시됩니다</text>';
+  $("aChips").innerHTML="";return;}
+ var s=[];
+ KEYS.forEach(function(k){if(!ATS[k])return;var p=tr(k,SEL);if(!p.length)return;
+  var v=p.map(function(x){return x.value;}),mn=Math.min.apply(null,v),mx=Math.max.apply(null,v),rg=(mx-mn)||1;
+  s.push({name:META[k].name,color:META[k].line,
+   points:p.map(function(x){return{year:x.year,value:x.value,n:((x.value-mn)/rg)*100};})});});
+ $("aTrendT").innerHTML=SEL+' 3대 지표 추세 <span class="sub">0~100 정규화 비교 · 분홍 점선=현재 연도</span>';
+ chart({id:"aChart",h:320,series:s,norm:1,now:AY,ml:48,fmt:function(v){return Math.round(v);}});
+ $("aChips").innerHTML=KEYS.map(function(k){
+  return'<span class="chip'+(ATS[k]?" on":"")+'" data-k="'+k+'"><i style="background:'+META[k].line+'"></i>'+META[k].name+' '+dlt(tr(k,SEL),META[k].good)+'</span>';}).join("");
+ Array.prototype.forEach.call($("aChips").children,function(c){
+  c.addEventListener("click",function(){var k=c.getAttribute("data-k");ATS[k]=!ATS[k];rATrend();});});}
+
+function lvz(z){return z>=1?"매우 높음":z>=.4?"높은 편":z>-.4?"평균 수준":z>-1?"낮은 편":"매우 낮음";}
+function mdb(s){return s.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");}
+function tw(k,r){var p=tr(k,r);if(p.length<2)return null;
+ var a=p[0].value,b=p[p.length-1].value,pc=(b-a)/Math.abs(a)*100;
+ return{from:p[0].year,to:p[p.length-1].year,pc:pc,
+  w:pc>=3?"뚜렷한 상승":pc>=.5?"완만한 상승":pc<=-3?"뚜렷한 하락":pc<=-.5?"완만한 하락":"보합"};}
+function ana(r){var g={};KEYS.forEach(function(k){g[k]=STAT[k]?STAT[k].map[r]:null;});
+ var s=g.satis,c=g.cpi,i=g.inc,n=(STAT.satis&&STAT.satis.n)||17;
+ var o={grade:"",head:"",dr:[],rk:[],sum:"",tnd:""};
+ if(!s)return o;
+ var hi=s.rank<=Math.ceil(n/3),lo=s.rank>n-Math.ceil(n/3);
+ o.grade=hi?"상위권":lo?"하위권":"중위권";
+ var real=(i?i.z:0)-(c?c.z:0);
+ var iH=i&&i.z>=.3,iL=i&&i.z<=-.3,cH=c&&c.z>=.3,cL=c&&c.z<=-.3;
+ if(iH)o.dr.push("처분가능소득이 전국 "+i.rank+"위로 **소비 여력이 넉넉**해 선택적 소비까지 확장될 여지가 큽니다.");
+ if(iL)o.dr.push("처분가능소득이 "+i.rank+"위로 하위권이어서 **필수재 지출 비중이 커지고 선택 소비 여력이 제약**됩니다.");
+ if(cL)o.dr.push("소비자물가가 "+c.rank+"위로 낮아 **같은 소득으로 체감하는 생활 여유가 큽니다**.");
+ if(cH)o.dr.push("소비자물가가 "+c.rank+"위로 높아 **명목소득이 구매력으로 충분히 전환되지 못합니다**.");
+ if(iH&&cH)o.rk.push("소득은 높지만 물가도 함께 높아 만족도 상승폭이 소득만큼 따라오지 못하는 고비용 구조입니다.");
+ if(iL&&cL)o.rk.push("물가가 낮아 생활비 부담은 덜하지만 소득 기반이 약해 개선 여력이 제한적입니다.");
+ if(real>=.6)o.dr.push("소득이 물가를 뚜렷하게 웃도는 **실질 구매력 우위** 지역입니다.");
+ if(real<=-.6)o.rk.push("물가가 소득을 웃도는 **실질 구매력 열위** 구조로 체감 만족도를 끌어내립니다.");
+ var p=PROF[r];
+ if(p)o.dr.push("소비 구조는 <mark>"+p[0]+"</mark>에 해당하며, "+p[1][0]+"는 점이 만족도에 직접 작용합니다.");
+ var rs=s.z-((i?i.z:0)*.55-(c?c.z:0)*.35);
+ if(rs>=.7)o.rk.push("소득·물가로 기대되는 수준보다 만족도가 **더 높습니다**. 주거 환경·여가 접근성 등 비경제적 요인이 긍정적으로 작용한 것으로 보입니다.");
+ if(rs<=-.7)o.rk.push("소득·물가로 기대되는 수준보다 만족도가 **더 낮습니다**. 상업·문화 인프라 접근성, 연령 구조 등의 영향이 의심됩니다.");
+ var ts=[];KEYS.forEach(function(k){var t=tw(k,r);
+  if(t)ts.push(META[k].name+"는 "+t.from+"→"+t.to+" "+t.w+"("+(t.pc>=0?"+":"")+t.pc.toFixed(1)+"%)");});
+ o.tnd=ts.length?ts.join(", ")+"을 보였습니다.":"";
+ o.head=hi?r+"의 소비만족도는 전국 "+s.rank+"위로 상위권입니다. "+(iH?"높은 소득 기반":cL?"낮은 생활물가":"소득·물가의 균형")+"이 주된 배경입니다."
+  :lo?r+"의 소비만족도는 전국 "+s.rank+"위로 하위권입니다. "+(iL?"소득 기반의 취약성":cH?"높은 생활물가 부담":"소비 인프라 제약")+"이 주요 제약 요인입니다."
+  :r+"의 소비만족도는 전국 "+s.rank+"위로 중위권이며, 소득과 물가가 상쇄되는 균형형 구조입니다.";
+ o.sum=r+"는 소비만족도 "+s.rank+"위("+lvz(s.z)+"), 처분가능소득 "+(i?i.rank+"위":"-")+", 소비자물가 "+(c?c.rank+"위":"-")+"를 기록했습니다. "+
+  (real>=.3?"소득이 물가를 앞서는 실질 구매력 우위 구조입니다.":real<=-.3?"물가 부담이 소득을 잠식하는 구조입니다.":"소득과 물가가 균형을 이룹니다.");
+ return o;}
+
+function rPanel(){var el=$("panel");
+ if(!SEL){el.innerHTML='<div class="empty"><span class="big">🗺️</span>지도에서 <b style="color:var(--ac)">시도를 클릭</b>하세요.<br>3대 지표의 현재 값과 연도별 추세,<br>만족도 격차 원인을 분석해 드립니다.</div>';return;}
+ var r=SEL,a=ana(r),p=PROF[r]||["-",[]];
+ var cl=KEYS.map(function(k){var st=STAT[k],d=st&&st.map[r];
+  if(!d)return'<div class="mcell"><div class="l">'+META[k].name+'</div><div class="v">-</div></div>';
+  var df=(d.value-st.mean)/st.mean*100,t=st.max===st.min?.5:(d.value-st.min)/(st.max-st.min);
+  var gd=META[k].good>0?df>=0:df<0,tp=tr(k,r);
+  return'<div class="mcell"><div class="l">'+META[k].name+' <span style="opacity:.7">('+st.year+')</span></div>'+
+  '<div class="v">'+F(k,d.value)+'<span style="font-size:11px;color:var(--sub)"> '+META[k].unit+'</span></div>'+
+  '<div class="r"><b>'+d.rank+'위</b>/'+st.n+' · <span style="color:'+(gd?"var(--up)":"var(--dn)")+'">'+(df>=0?"+":"")+df.toFixed(1)+'%</span></div>'+
+  '<div class="gbar"><i style="width:'+Math.max(t*100,4)+'%;background:'+RMP(k,t)+'"></i></div>'+
+  '<div class="sp"><div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--sub);margin-bottom:2px"><span>추세</span>'+dlt(tp,META[k].good)+'</div>'+
+  spark(tp,META[k].line,160,30)+'</div></div>';}).join("");
+ var sr=(STAT.satis&&STAT.satis.map[r])?STAT.satis.map[r].rank:"-";
+ var sv=sol(r);
+ el.innerHTML='<div class="ph"><span class="nm">'+r+'</span><span class="tag">소비만족도 '+sr+'위 · '+a.grade+'</span><span class="tag">'+p[0]+'</span></div>'+
+ '<div class="mrow">'+cl+'</div>'+
+ '<div class="sec"><h4>📌 한눈에 보기</h4><p>'+a.head+'</p></div>'+
+ (a.tnd?'<div class="sec"><h4>📈 기간 중 변화</h4><p>'+a.tnd+'</p></div>':"")+
+ '<div class="sec"><h4>🛒 소비 특징</h4><ul>'+p[1].map(function(t){return"<li>"+t+"</li>";}).join("")+'</ul></div>'+
+ '<div class="sec"><h4>🔍 격차 요인 분석</h4><ul>'+(a.dr.length?a.dr:["특징적 요인이 뚜렷하지 않습니다."]).map(function(t){return"<li>"+mdb(t)+"</li>";}).join("")+'</ul></div>'+
+ (a.rk.length?'<div class="sec"><h4>⚠️ 해석 시 유의점</h4><ul>'+a.rk.map(function(t){return"<li>"+mdb(t)+"</li>";}).join("")+'</ul></div>':"")+
+ '<div class="sec"><h4>💡 소비만족도 향상 해결방안</h4><ul>'+sv.slice(0,4).map(function(x){
+   return"<li><b>"+x.t+"</b>("+x.h+") — "+x.a+"</li>";}).join("")+'</ul></div>'+
+ '<div class="sec"><h4>🧭 종합</h4><p>'+a.sum+'</p></div>'+
+ '<button class="btn" id="bRep2" style="width:100%;padding:12px">📄 '+r+' 보고서 작성 (해결방안·활용방안 포함)</button>';
+ $("bRep2").addEventListener("click",openRep);}
+
+function openRep(){$("repScope").value=SEL?"region":"all";bRep();$("modal").classList.remove("hide");}
+function tday(){var d=new Date();return d.getFullYear()+"년 "+(d.getMonth()+1)+"월 "+d.getDate()+"일";}
+function rtbl(k){var st=STAT[k];if(!st)return"";
+ return'<table><tr><th>순위</th><th>시도</th><th>'+META[k].name+'</th><th>평균대비</th><th>기간변화</th></tr>'+
+ st.list.map(function(d,i){var t=tw(k,d.region);
+  return'<tr><td>'+(i+1)+'</td><td>'+d.region+'</td><td>'+F(k,d.value)+'</td><td>'+
+  ((d.value-st.mean)/st.mean*100).toFixed(1)+'%</td><td>'+(t?(t.pc>=0?"+":"")+t.pc.toFixed(1)+"%":"-")+'</td></tr>';}).join("")+'</table>';}
+
+/* ===== 소비만족도 개선 해결방안 생성 ===== */
+function sol(r){
+ var g={};KEYS.forEach(function(k){g[k]=STAT[k]?STAT[k].map[r]:null;});
+ var s=g.satis,c=g.cpi,i=g.inc,n=(STAT.satis&&STAT.satis.n)||17;
+ var S=[];if(!s)return S;
+ var iL=i&&i.z<=-.3,iH=i&&i.z>=.3,cH=c&&c.z>=.3,cL=c&&c.z<=-.3;
+ var real=(i?i.z:0)-(c?c.z:0);
+ var lo=s.rank>n-Math.ceil(n/3),hi=s.rank<=Math.ceil(n/3);
+ if(iL)S.push({t:"소득 기반 확충",h:"중·장기",
+  a:"지역 주력산업 연계 일자리 창출, 청년·중장년 재취업 패키지 확대, 소상공인 매출 회복 지원",
+  w:"처분가능소득 상승 → 외식·여가 등 선택적 소비 여력 회복"});
+ if(cH)S.push({t:"생활물가 안정",h:"단기",
+  a:"농수산물 직거래 장터·공공배송 확대, 물류비 보조, 생필품 가격 공표제 운영",
+  w:"장바구니 물가 체감 하락 → 동일 소득의 실질 구매력 개선"});
+ if(cL&&iL)S.push({t:"저비용 강점 활용",h:"장기",
+  a:"낮은 생활비를 내세운 정주 마케팅과 기업·공공기관 유치로 소득 기반 보강",
+  w:"인구 유입과 소득·소비의 동반 상승"});
+ if(real<=-.6)S.push({t:"실질 구매력 보전",h:"단기",
+  a:"지역화폐 할인율 상향, 공공요금·대중교통비 경감, 저소득 가구 소비쿠폰 선별 지원",
+  w:"가처분 소득의 실효 증대로 단기 체감 만족도 개선"});
+ if(lo)S.push({t:"소비 인프라 확충",h:"중기",
+  a:"생활권 30분 내 상업·문화시설 조성, 복합생활SOC 확충, 공공 여가 프로그램 상설 운영",
+  w:"소비 선택지 확대 → 비경제적 만족 요인 보강"});
+ var p=PROF[r];
+ if(p){var txt=p[0]+p[1].join("");
+  if(/고령/.test(txt))S.push({t:"고령 친화 소비환경",h:"중기",
+   a:"이동 진료·장보기 셔틀·교통바우처 운영, 고령층 디지털 소비 교육",
+   w:"필수 지출 부담 완화와 소비 접근성 확대"});
+  if(/관광|고물가|물류비/.test(txt))S.push({t:"관광지 물가 관리",h:"단기",
+   a:"성수기 가격 모니터링·과다요금 신고센터, 주민 전용 할인제 도입",
+   w:"주민 체감 물가 안정과 관광 신뢰도 동시 확보"});
+  if(/유출|역외/.test(txt))S.push({t:"역외 소비 흡수",h:"중기",
+   a:"특화 상권 거리 조성, 지역화폐 가맹점 확대, 온라인 지역몰 운영",
+   w:"관외로 빠져나가던 소비의 역내 환류"});
+  if(/주거비/.test(txt))S.push({t:"주거비 부담 완화",h:"중·장기",
+   a:"청년·신혼 임대주택 공급 확대, 전월세 지원과 노후주택 정비",
+   w:"주거비 절감분이 선택적 소비로 이전"});
+ }
+ if(hi)S.push({t:"우위 유지·내부격차 보완",h:"지속",
+  a:"상위권 요인(소득·저물가·인프라)의 상시 모니터링과 도심–외곽 간 격차 보완 투자",
+  w:"평균의 함정 방지 및 만족도 상위 유지"});
+ if(!S.length)S.push({t:"균형 관리",h:"지속",
+  a:"소득·물가·인프라 3축의 분기별 모니터링 체계 운영",
+  w:"격차 확대의 조기 감지"});
+ return S;}
+function solAll(){var st=STAT.satis;if(!st)return[];
+ var bt=st.list.slice(-3).map(function(d){return d.region;}).join("·");
+ var tp=st.list.slice(0,3).map(function(d){return d.region;}).join("·");
+ return[
+ {t:"소득 하위권 집중 지원",h:"중·장기",a:bt+" 등 하위 지역에 일자리·기업유치 인센티브를 우선 배분",w:"지역 간 소비만족도 격차 축소"},
+ {t:"생활물가 안정",h:"단기",a:"고물가 지역 중심 유통·물류 구조 개선 및 공공 가격 공표 확대",w:"실질 구매력의 전국 균등화"},
+ {t:"생활 인프라 균형",h:"중기",a:"문화·여가·의료 접근성 취약 지역에 생활SOC 우선 투자",w:"비경제적 만족 요인 보강"},
+ {t:"우수사례 확산",h:"지속",a:tp+" 등 상위 지역의 정책 요인을 분석해 표준모델로 이전",w:"저비용 고효율 정책 복제"},
+ {t:"측정 체계 고도화",h:"지속",a:"소비만족도·물가·소득을 결합한 체감소비지수의 정례 산출",w:"정책 효과의 정량 추적"}];}
+function hcls(h){return /단기/.test(h)?"s1":/중기|중·장기/.test(h)?"s2":"s3";}
+function soltbl(S){if(!S.length)return"";
+ return'<table><tr><th>분야</th><th>추진 과제</th><th>기대 효과</th><th>추진 시계</th></tr>'+
+ S.map(function(x){return'<tr><td><span class="tagk '+hcls(x.h)+'">'+x.t+'</span></td><td>'+x.a+'</td><td>'+x.w+'</td><td>'+x.h+'</td></tr>';}).join("")+'</table>';}
+function useway(isR,r){var who=isR?(r+" 지방자치단체"):"중앙·광역 행정기관";
+ return'<ul>'+
+ '<li><b>정책 기획</b> — '+who+'의 연간 업무계획·지역균형발전 시행계획 수립 시 현황 진단 근거로 인용</li>'+
+ '<li><b>예산 편성</b> — 해결방안의 추진 시계(단기·중기·장기)를 연차별 예산계획과 매칭해 사업 우선순위 산정</li>'+
+ '<li><b>성과 관리</b> — 소비만족도 순위와 전국평균 대비 격차를 KPI로 설정하고 차년도 보고서와 비교해 정책 효과 검증</li>'+
+ '<li><b>기업·상권 전략</b> — 소득·물가 구조 정보를 점포 입지 선정, 가격 전략, 지역 맞춤 마케팅의 기초 데이터로 활용</li>'+
+ '<li><b>연구·교육</b> — 지역격차·소비행태 연구의 1차 자료, 사회·경제 수업의 데이터 리터러시 교재로 활용</li>'+
+ '<li><b>주민 소통</b> — 주민설명회·의회 보고·보도자료에 지도와 순위표를 그대로 사용해 근거 기반 설득</li>'+
+ '<li><b>데이터 연계</b> — 인구·고용·주거 통계와 결합하면 원인 규명의 정밀도를 추가로 높일 수 있음</li>'+
+ '<li><b>갱신 주기</b> — KOSIS 신규 공표 시 대시보드를 재연결해 보고서를 자동 갱신, 시계열 관리대장으로 축적</li></ul>';}
+
+/* ===== 보고서용 추이 꺾은선 도표 (자체 완결 SVG) ===== */
+function rsvg(opts){
+ var W=760,H=250,L=66,R=16,T=26,B=34;
+ var ls=(opts.series||[]).filter(function(s){return s.points&&s.points.length;});
+ if(!ls.length)return'<p style="color:#8ba3b9">표시할 데이터가 없습니다.</p>';
+ var yl={},yr=[];
+ ls.forEach(function(s){s.points.forEach(function(p){if(!yl[p.year]){yl[p.year]=1;yr.push(p.year);}});});
+ yr.sort();
+ var vn=Infinity,vx=-Infinity;
+ ls.forEach(function(s){s.points.forEach(function(p){if(p.value<vn)vn=p.value;if(p.value>vx)vx=p.value;});});
+ var pad=(vx-vn)*.18||Math.abs(vx*.05)||1;vn-=pad;vx+=pad;
+ var X=function(y){var i=yr.indexOf(y);return L+(yr.length<2?(W-L-R)/2:i*(W-L-R)/(yr.length-1));};
+ var Y=function(v){return T+(H-T-B)*(1-(v-vn)/((vx-vn)||1));};
+ var f=opts.fmt||function(v){return v.toFixed(1);};
+ var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;background:#fff;font-family:inherit">';
+ s+='<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#fff"></rect>';
+ for(var g=0;g<=4;g++){var vy=vn+(vx-vn)*g/4,py=Y(vy);
+  s+='<line x1="'+L+'" y1="'+py.toFixed(1)+'" x2="'+(W-R)+'" y2="'+py.toFixed(1)+'" stroke="#eaf3fa" stroke-width="1"></line>'+
+     '<text x="'+(L-8)+'" y="'+(py+4).toFixed(1)+'" text-anchor="end" font-size="11" fill="#8ba3b9">'+f(vy)+'</text>';}
+ yr.forEach(function(y){var px=X(y);
+  s+='<line x1="'+px.toFixed(1)+'" y1="'+T+'" x2="'+px.toFixed(1)+'" y2="'+(H-B)+'" stroke="#f3f8fc" stroke-width="1"></line>'+
+     '<text x="'+px.toFixed(1)+'" y="'+(H-B+18)+'" text-anchor="middle" font-size="11" fill="#8ba3b9">'+y+'</text>';});
+ s+='<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#dbeaf6" stroke-width="1.2"></line>';
+ ls.forEach(function(sr){
+  var pt=sr.points.map(function(p){return[X(p.year),Y(p.value)];});
+  var d=pt.map(function(p,i){return(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1);}).join(" ");
+  s+='<path d="'+d+'" fill="none" stroke="'+sr.color+'" stroke-width="'+(sr.dash?1.6:2.6)+'" stroke-linejoin="round" stroke-linecap="round"'+
+     (sr.dash?' stroke-dasharray="6 4" opacity=".75"':'')+'></path>';
+  pt.forEach(function(p,i){
+   s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(sr.dash?2.4:3.4)+'" fill="'+sr.color+'" stroke="#fff" stroke-width="1.4"></circle>';
+   if(!sr.dash&&opts.labels!==false)
+    s+='<text x="'+p[0].toFixed(1)+'" y="'+(p[1]-9).toFixed(1)+'" text-anchor="middle" font-size="10.5" font-weight="700" fill="'+sr.color+'">'+f(sr.points[i].value)+'</text>';});});
+ var lx=L;
+ s+='<g>'+ls.map(function(sr){var g='<rect x="'+lx+'" y="6" width="11" height="4" rx="2" fill="'+sr.color+'"'+(sr.dash?' opacity=".6"':'')+'></rect>'+
+   '<text x="'+(lx+16)+'" y="11" font-size="11" fill="#5d7a90">'+sr.name+'</text>';
+   lx+=22+sr.name.length*11;return g;}).join("")+'</g>';
+ s+='<text x="'+(W-R)+'" y="11" text-anchor="end" font-size="10.5" fill="#a9c4d6">단위: '+(opts.unit||"")+'</text>';
+ return s+'</svg>';}
+
+/* 지역 보고서용: 지표별 해당 시도 vs 전국평균 */
+function repLine(k,r){
+ var p=tr(k,r),m=mtr(k),se=[];
+ if(p.length)se.push({name:r,color:META[k].line,points:p});
+ if(m.length)se.push({name:"전국평균",color:"#9fb3c4",points:m,dash:1});
+ return'<div class="chartbox"><div class="ct">'+META[k].name+' 추이 ('+(p.length?p[0].year+"~"+p[p.length-1].year:"-")+')</div>'+
+  rsvg({series:se,unit:META[k].unit,fmt:function(v){return F(k,v);}})+'</div>';}
+
+/* 전국 보고서용: 전국평균 + 최고/최저 시도 */
+function repLineAll(k){
+ var st=STAT[k],se=[],m=mtr(k);
+ if(m.length)se.push({name:"전국평균",color:META[k].line,points:m});
+ if(st&&st.list.length){
+  var hi=st.list[0].region,lo=st.list[st.list.length-1].region;
+  var a=tr(k,hi),b=tr(k,lo);
+  if(a.length)se.push({name:"최고 "+hi,color:"#4e9c88",points:a,dash:1});
+  if(b.length)se.push({name:"최저 "+lo,color:"#e08a93",points:b,dash:1});}
+ return'<div class="chartbox"><div class="ct">'+META[k].name+' 전국 추이</div>'+
+  rsvg({series:se,unit:META[k].unit,labels:false,fmt:function(v){return F(k,v);}})+'</div>';}
+function repCharts(r){
+ return KEYS.map(function(k){return r?repLine(k,r):repLineAll(k);}).join("");}
+
+function bRep(){var sc=$("repScope").value,isR=(sc==="region"&&SEL),b="";
+ var hd='<h2>'+(isR?SEL+" 소비 분석 보고서":"전국 시도별 소비 분석 보고서")+'</h2><div class="meta">작성일 '+tday()+
+  ' · 출처 KOSIS 국가통계포털 · 기준연도 '+KEYS.map(function(k){return STAT[k]?META[k].name+" "+STAT[k].year:"";}).filter(Boolean).join(" / ")+
+  (DEMO?' · <b style="color:#4e8cba">※ 예시(DEMO) 데이터</b>':"")+'</div>';
+ if(isR){var r=SEL,a=ana(r),p=PROF[r]||["-",[]],S=sol(r);
+  b='<h3>1. 개요</h3><p>'+r+'의 소비만족도를 전국 17개 시도와 비교하고, 물가·소득 관계와 연도별 추세로 격차 원인을 분석한 뒤 소비만족도를 높이기 위한 해결방안과 본 보고서의 활용 방안을 제시한다.</p>'+
+   '<h3>2. 주요 지표</h3><table><tr><th>지표</th><th>값</th><th>순위</th><th>전국평균</th><th>기간변화</th></tr>'+
+   KEYS.map(function(k){var st=STAT[k],d=st&&st.map[r];if(!d)return"";var t=tw(k,r);
+    return'<tr><td>'+META[k].name+'</td><td>'+F(k,d.value)+' '+META[k].unit+'</td><td>'+d.rank+'위/'+st.n+'</td><td>'+
+    F(k,st.mean)+'</td><td>'+(t?t.from+"→"+t.to+" "+(t.pc>=0?"+":"")+t.pc.toFixed(1)+"%":"-")+'</td></tr>';}).join("")+'</table>'+
+   '<h3>3. 연도별 추세</h3><p>'+(a.tnd||"-")+'</p>'+repCharts(r)+'<div class="solbox" style="font-size:12.6px">※ 실선은 '+r+', 회색 점선은 전국평균이다. 세 지표의 기울기를 함께 보면 소득·물가 변화가 만족도에 어떻게 전이되는지 확인할 수 있다.</div>'+
+   '<h3>4. 소비 구조</h3><p>'+r+'의 소비 구조는 <b>'+p[0]+'</b>으로 분류된다.</p><ul>'+p[1].map(function(t){return"<li>"+t+"</li>";}).join("")+'</ul>'+
+   '<h3>5. 격차 요인</h3><p>'+a.head+'</p><ul>'+a.dr.map(function(t){return"<li>"+mdb(t).replace(/<\/?mark>/g,"")+"</li>";}).join("")+'</ul>'+
+   (a.rk.length?'<h3>6. 유의사항</h3><ul>'+a.rk.map(function(t){return"<li>"+mdb(t)+"</li>";}).join("")+'</ul>':"")+
+   '<h3>7. 소비만족도 향상 해결방안</h3><p>'+r+'의 지표 구조(소득 '+((STAT.inc&&STAT.inc.map[r])?STAT.inc.map[r].rank+"위":"-")+
+   ', 물가 '+((STAT.cpi&&STAT.cpi.map[r])?STAT.cpi.map[r].rank+"위":"-")+')에서 도출된 우선 과제는 다음과 같다.</p>'+soltbl(S)+
+   '<div class="solbox"><b>추진 원칙</b> — 단기 과제는 체감 물가와 실질 구매력에, 중·장기 과제는 소득 기반과 생활 인프라에 작용한다. '+
+   '두 축을 병행해야 순위 개선이 일시적 반등에 그치지 않고 구조적으로 정착된다.</div>'+
+   '<h3>8. 본 보고서의 활용 방안</h3>'+useway(true,r)+
+   '<h3>9. 종합</h3><p>'+a.sum+'</p><h3>10. 부표 — 소비만족도</h3>'+rtbl("satis");
+ }else{var st=STAT.satis,tp=st?st.list.slice(0,3):[],bt=st?st.list.slice(-3):[];
+  b='<h3>1. 개요</h3><p>전국 17개 시도의 소비만족도·물가·소득 격차와 추세를 비교 분석하고, 소비만족도 향상 해결방안과 본 보고서의 활용 방안을 제시한다.</p>'+
+   '<h3>2. 전국 현황</h3><table><tr><th>지표</th><th>연도</th><th>평균</th><th>최고</th><th>최저</th></tr>'+
+   KEYS.map(function(k){var s=STAT[k];if(!s)return"";
+    return'<tr><td>'+META[k].name+'</td><td>'+s.year+'</td><td>'+F(k,s.mean)+'</td><td>'+
+    s.list[0].region+' '+F(k,s.list[0].value)+'</td><td>'+s.list[s.list.length-1].region+' '+F(k,s.list[s.list.length-1].value)+'</td></tr>';}).join("")+'</table>'+
+   '<h3>3. 상·하위 지역</h3><p>상위: '+tp.map(function(d){return"<b>"+d.region+"</b>("+F("satis",d.value)+")";}).join(", ")+
+   ' / 하위: '+bt.map(function(d){return"<b>"+d.region+"</b>("+F("satis",d.value)+")";}).join(", ")+'</p>'+
+   '<ul>'+tp.concat(bt).map(function(d){return"<li>"+d.region+": "+ana(d.region).sum+"</li>";}).join("")+'</ul>'+
+   '<h3>4. 시사점</h3><ul><li>소득·만족도 동반 하위 지역은 일자리 기반 확충이 1차 과제이다.</li>'+
+   '<li>고물가 지역은 유통·물류 구조 개선이 체감 만족도에 직접 기여한다.</li>'+
+   '<li>소득 대비 만족도가 낮은 지역은 문화·여가 인프라 접근성 개선이 필요하다.</li></ul>'+
+   '<h3>5. 지표별 전국 추이 도표</h3>'+repCharts(null)+'<div class="solbox" style="font-size:12.6px">※ 실선은 전국평균, 점선은 각 지표의 최고·최저 시도다. 두 점선의 간격이 지역 간 격차의 크기를 나타낸다.</div>'+'<h3>6. 소비만족도 향상 해결방안 (전국 공통)</h3>'+soltbl(solAll())+
+   '<h3>7. 하위 지역 맞춤 처방</h3>'+bt.map(function(d){
+     return'<p style="margin:14px 0 4px"><b>'+d.region+'</b></p>'+soltbl(sol(d.region));}).join("")+
+   '<h3>8. 본 보고서의 활용 방안</h3>'+useway(false,"")+
+   '<h3>9. 부표 — 소비만족도</h3>'+rtbl("satis")+'<h3>10. 부표 — 처분가능소득</h3>'+rtbl("inc");}
+ $("repT").textContent=isR?SEL+" 보고서":"전국 종합 보고서";
+ $("repBody").innerHTML=hd+b+'<h3>※ 한계</h3><ul><li>지표별 조사 주기가 달라 가장 가까운 연도를 매칭하였다.</li>'+
+  '<li>규칙 기반 해석으로 인과관계를 단정하지 않으며, 해결방안은 정책 검토를 위한 참고안이다.</li>'+
+  (DEMO?"<li><b>예시 데이터 기반이다.</b></li>":"")+'</ul>';}
+
+function repDoc(){var t=$("repT").textContent;
+ var h='<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>'+t+'</title><style>'+
+ 'body{font-family:-apple-system,"Malgun Gothic",sans-serif;max-width:860px;margin:40px auto;padding:0 24px;line-height:1.9;color:#2d3e50}'+
+ 'h2{font-size:24px;border-bottom:3px solid #5aa9dd;padding-bottom:10px}'+
+ 'h3{font-size:16px;color:#3d7ca8;border-left:4px solid #8ecbf0;padding-left:10px;margin:28px 0 10px}'+
+ 'table{width:100%;border-collapse:collapse;font-size:13px}th,td{border:1px solid #dbeaf6;padding:7px 9px;text-align:right}'+
+ 'th{background:#eaf5fd}th:nth-child(-n+2),td:nth-child(-n+2){text-align:left}'+
+ '.chartbox{border:1px solid #dbeaf6;border-radius:12px;padding:10px 12px 4px;margin:14px 0;page-break-inside:avoid}'+
+ '.chartbox .ct{font-size:13px;font-weight:700;color:#3d7ca8;margin-bottom:4px}'+
+ '.solbox{background:#f3faff;border:1px solid #cfe7f8;border-radius:10px;padding:12px 16px;margin:10px 0}'+
+ '.tagk{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:#dcecf9;color:#3d7ca8}'+
+ '.tagk.s1{background:#fde7ea;color:#b65f69}.tagk.s2{background:#fdf0dd;color:#9a6c23}.tagk.s3{background:#e3f3ee;color:#357a66}'+
+ '@page{size:A4;margin:14mm}'+
+ '@media print{body{margin:0;max-width:none}h3{page-break-after:avoid}table,ul,.solbox{page-break-inside:avoid}}'+
+ '</style></head><body>'+$("repBody").innerHTML+'</body></html>';
+ return{title:t,html:h};}
+function repHtml(){var d=repDoc();
+ var a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([d.html],{type:"text/html;charset=utf-8"}));
+ a.download=d.title.replace(/\s/g,"_")+".html";a.click();}
+
+/* === PDF 다운로드 (iframe 캡처 + 수동 페이지 분할 v4) === */
+var PDFW=780;
+var CDN_H2C=["https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js",
+ "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js",
+ "https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"];
+var CDN_JSP=["https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
+ "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js",
+ "https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"];
+function loadOne(list,test,cb,i){i=i||0;
+ if(test()){cb(true);return;}
+ if(i>=list.length){cb(false);return;}
+ var s=document.createElement("script");s.src=list[i];
+ s.onload=function(){test()?cb(true):loadOne(list,test,cb,i+1);};
+ s.onerror=function(){loadOne(list,test,cb,i+1);};
+ document.head.appendChild(s);}
+function getJsPDF(){return (window.jspdf&&window.jspdf.jsPDF)||window.jsPDF||null;}
+function loadPdfLib(cb){
+ loadOne(CDN_H2C,function(){return !!window.html2canvas;},function(a){
+  if(!a){cb(false);return;}
+  loadOne(CDN_JSP,function(){return !!getJsPDF();},function(b){cb(!!b);});});}
+
+/* 문서 내 인라인 SVG 를 PNG 로 치환 (해당 document 기준) */
+function svg2img(root,doc,done){
+ var list=Array.prototype.slice.call(root.querySelectorAll("svg"));
+ if(!list.length){done();return;}
+ var left=list.length,fin=function(){if(--left<=0)done();};
+ list.forEach(function(sv){
+  var vb=(sv.getAttribute("viewBox")||"").split(/[ ,]+/);
+  var w=(vb.length===4?parseFloat(vb[2]):0)||parseFloat(sv.getAttribute("width"))||700;
+  var hh=(vb.length===4?parseFloat(vb[3]):0)||parseFloat(sv.getAttribute("height"))||260;
+  var c=sv.cloneNode(true);
+  c.setAttribute("xmlns","http://www.w3.org/2000/svg");
+  c.setAttribute("width",w);c.setAttribute("height",hh);
+  if(vb.length!==4)c.setAttribute("viewBox","0 0 "+w+" "+hh);
+  c.setAttribute("style","background:#fff;font-family:'Malgun Gothic',sans-serif");
+  var txt='<?xml version="1.0" encoding="UTF-8"?>'+(new XMLSerializer()).serializeToString(c);
+  var uri="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(txt);
+  var sc=2,cv=document.createElement("canvas");cv.width=w*sc;cv.height=hh*sc;
+  var im=new Image();
+  im.onload=function(){
+   var png=uri;
+   try{var g=cv.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,cv.width,cv.height);
+    g.drawImage(im,0,0,cv.width,cv.height);png=cv.toDataURL("image/png");}catch(e){}
+   var out=doc.createElement("img");
+   out.style.cssText="width:100%;height:auto;display:block";
+   out.onload=function(){fin();};out.onerror=function(){fin();};
+   if(sv.parentNode)sv.parentNode.replaceChild(out,sv);
+   out.src=png;};
+  im.onerror=function(){fin();};
+  im.src=uri;});}
+function waitImgs(doc,cb){
+ var ims=Array.prototype.slice.call(doc.images||[]);
+ var left=ims.filter(function(x){return !x.complete;}).length;
+ if(!left){cb();return;}
+ var fin=function(){if(--left<=0)cb();};
+ ims.forEach(function(x){if(!x.complete){x.addEventListener("load",fin);x.addEventListener("error",fin);}});
+ setTimeout(cb,4000);}
+
+function pdfFallback(d){
+ var w=window.open("","_blank");
+ if(!w){alert("\ud31d\uc5c5\uc774 \ucc28\ub2e8\ub418\uc5c8\uc2b5\ub2c8\ub2e4. \ube0c\ub77c\uc6b0\uc800 \ud31d\uc5c5 \ud5c8\uc6a9 \ud6c4 \ub2e4\uc2dc \uc2dc\ub3c4\ud558\uc138\uc694.");return;}
+ w.document.open();w.document.write(d.html);w.document.close();
+ setTimeout(function(){try{w.focus();w.print();}catch(e){}},700);}
+
+function pdfStyle(){
+ return 'html,body{margin:0;padding:0;background:#fff}'+
+ 'body{font-family:-apple-system,"Malgun Gothic","\ub9d1\uc740 \uace0\ub515",sans-serif;width:'+PDFW+'px;'+
+ 'padding:0 14px;box-sizing:border-box;line-height:1.75;color:#2d3e50;font-size:12.8px;-webkit-text-size-adjust:100%}'+
+ 'h2{font-size:20px;border-bottom:3px solid #5aa9dd;padding-bottom:8px;margin:0 0 6px;color:#2d3e50}'+
+ 'h3{font-size:14.5px;color:#3d7ca8;border-left:4px solid #8ecbf0;padding-left:10px;margin:18px 0 7px}'+
+ 'p{margin:5px 0}'+
+ '.meta{color:#7f95a8;font-size:11.6px;margin-bottom:10px;word-break:keep-all}'+
+ 'table{width:100%;border-collapse:collapse;font-size:11.4px;table-layout:fixed}'+
+ 'th,td{border:1px solid #dbeaf6;padding:5px 6px;text-align:right;word-break:break-all;overflow-wrap:anywhere}'+
+ 'th{background:#eaf5fd}'+
+ 'th:nth-child(-n+2),td:nth-child(-n+2){text-align:left}'+
+ 'ul{padding-left:17px;margin:5px 0}li{margin:2px 0}'+
+ '.chartbox{border:1px solid #dbeaf6;border-radius:10px;padding:8px 10px 4px;margin:10px 0;background:#fff}'+
+ '.chartbox .ct{font-size:12.2px;font-weight:700;color:#3d7ca8;margin-bottom:3px}'+
+ '.solbox{background:#f3faff;border:1px solid #cfe7f8;border-radius:10px;padding:10px 13px;margin:8px 0}'+
+ '.tagk{display:inline-block;font-size:10.6px;font-weight:700;padding:2px 8px;border-radius:999px;background:#dcecf9;color:#3d7ca8}'+
+ '.tagk.s1{background:#fde7ea;color:#b65f69}.tagk.s2{background:#fdf0dd;color:#9a6c23}.tagk.s3{background:#e3f3ee;color:#357a66}'+
+ 'img{max-width:100%;height:auto;display:block}'+
+ 'mark{background:#dceffb;color:#2f6e96;padding:1px 5px;border-radius:5px}';}
+
+function repPdf(){
+ var btn=$("bRepPdf"),orig=btn.innerHTML,d=repDoc();
+ var body=$("repBody").innerHTML;
+ if(!body.replace(/\s/g,"")){alert("\ubcf4\uace0\uc11c \ub0b4\uc6a9\uc774 \ube44\uc5b4 \uc788\uc2b5\ub2c8\ub2e4. \uba3c\uc800 \ubcf4\uace0\uc11c\ub97c \uc791\uc131\ud558\uc138\uc694.");return;}
+ btn.disabled=true;btn.innerHTML="PDF \uc0dd\uc131 \uc911\u2026";
+ var ov=document.createElement("div");
+ ov.style.cssText="position:fixed;inset:0;background:rgba(40,70,95,.72);z-index:99999;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700";
+ ov.textContent="PDF \ub97c \ub9cc\ub4dc\ub294 \uc911\uc785\ub2c8\ub2e4\u2026";
+ document.body.appendChild(ov);
+ /* 독립 iframe 에서 렌더링 → 본문 스크롤/레이아웃 영향 완전 차단 */
+ var ifr=document.createElement("iframe");
+ ifr.setAttribute("aria-hidden","true");
+ ifr.style.cssText="position:fixed;left:0;top:0;width:"+PDFW+"px;height:1200px;border:0;opacity:0.01;z-index:-1;pointer-events:none;background:#fff";
+ document.body.appendChild(ifr);
+ var cleanup=function(){
+  if(ifr.parentNode)ifr.parentNode.removeChild(ifr);
+  if(ov.parentNode)ov.parentNode.removeChild(ov);
+  btn.disabled=false;btn.innerHTML=orig;};
+ var fail=function(msg){cleanup();
+  log("PDF \uc0dd\uc131 \uc2e4\ud328("+msg+") \u2014 \uc778\uc1c4 \ucc3d\uc73c\ub85c \ub300\uccb4\ud569\ub2c8\ub2e4","err");
+  pdfFallback(d);};
+ var doc=ifr.contentDocument||ifr.contentWindow.document;
+ doc.open();
+ doc.write('<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><style>'+pdfStyle()+'</style></head><body>'+body+'</body></html>');
+ doc.close();
+ loadPdfLib(function(ok){
+  if(!ok){cleanup();
+   log("PDF \ub77c\uc774\ube0c\ub7ec\ub9ac\ub97c \ubd88\ub7ec\uc62c \uc218 \uc5c6\uc5b4 \uc778\uc1c4 \ucc3d\uc73c\ub85c \ub300\uccb4\ud569\ub2c8\ub2e4 \u2014 \u2018\ub300\uc0c1\u2019\uc744 PDF\ub85c \uc800\uc7a5\ud558\uc138\uc694","warn");
+   pdfFallback(d);return;}
+  svg2img(doc.body,doc,function(){waitImgs(doc,function(){
+   var go=function(){
+    var fn=d.title.replace(/\s/g,"_")+"_"+tday().replace(/[^0-9]/g,"")+".pdf";
+    var H=Math.max(doc.body.scrollHeight,doc.documentElement.scrollHeight,100);
+    ifr.style.height=(H+40)+"px";
+    try{
+     window.html2canvas(doc.body,{
+      scale:2,backgroundColor:"#ffffff",useCORS:true,allowTaint:true,logging:false,
+      scrollX:0,scrollY:0,x:0,y:0,
+      width:PDFW,height:H,windowWidth:PDFW,windowHeight:H+40
+     }).then(function(cv){
+      if(!cv||!cv.width||!cv.height){fail("empty canvas");return;}
+      var JP=getJsPDF(),pdf=new JP({unit:"mm",format:"a4",orientation:"portrait",compress:true});
+      var MX=10,MY=12,PW=210,PH=297;
+      var iw=PW-MX*2;                      /* 이미지 표시 폭(mm) */
+      var pxmm=cv.width/iw;                /* 1mm 당 픽셀 */
+      var sliceH=Math.floor((PH-MY*2)*pxmm);  /* 한 페이지에 담을 픽셀 높이 */
+      var y=0,page=0;
+      while(y<cv.height){
+       var h=Math.min(sliceH,cv.height-y);
+       var tmp=document.createElement("canvas");
+       tmp.width=cv.width;tmp.height=h;
+       var g=tmp.getContext("2d");
+       g.fillStyle="#ffffff";g.fillRect(0,0,tmp.width,tmp.height);
+       g.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);
+       if(page>0)pdf.addPage();
+       pdf.addImage(tmp.toDataURL("image/jpeg",0.95),"JPEG",MX,MY,iw,h/pxmm,undefined,"FAST");
+       y+=h;page++;
+       if(page>60)break;
+      }
+      pdf.save(fn);
+      cleanup();log("PDF \uc800\uc7a5 \uc644\ub8cc \u00b7 "+fn+" ("+page+"\ud398\uc774\uc9c0)","ok");
+     })["catch"](function(e){fail(e&&e.message?e.message:"canvas error");});
+    }catch(e){fail(e.message||"exception");}};
+   var fr=ifr.contentWindow;
+   if(fr&&fr.document&&fr.document.fonts&&fr.document.fonts.ready){
+    fr.document.fonts.ready.then(function(){setTimeout(go,350);});
+   }else setTimeout(go,500);});});});}
+
+function useDemo(){DEMO=true;RAW=buildDemo();C={};SEL=null;DSEL=null;AY=null;
+ $("mode").className="badge";$("mode").textContent="DEMO 데이터";
+ hsum();
+ if(!$("vAna").classList.contains("hide"))openA();else if(VIEW)openV(VIEW);else home();
+ log("예시 데이터로 표시 중 · 내장 SVG 지도 · 실제 통계값 아님","warn");}
+/* ===== 중계 서버(Apps Script) 연결 =====
+ PROXY_URL : 배포한 Apps Script 웹앱 URL(.../exec)을 여기에 넣으면 페이지 열릴 때 자동 연결.
+             KOSIS 인증키는 Apps Script 스크립트 속성에만 있으므로 이 URL은 공개되어도 된다.           */
+var PROXY_URL="https://script.google.com/macros/s/AKfycbx1YGM0wVsmXXn0_pNvhyscrVTYH9cUQTQbSWHDdYZ2GpN93o8hbaBOL1f-5SdCfnL7/exec";
+function jsonp(url){return new Promise(function(ok,no){
+ var cb="__kosis_cb_"+Date.now(),sc=document.createElement("script"),t=setTimeout(function(){fail("JSONP 시간 초과");},40000);
+ function fail(m){clearTimeout(t);delete window[cb];if(sc.parentNode)sc.parentNode.removeChild(sc);no(new Error(m));}
+ window[cb]=function(d){clearTimeout(t);delete window[cb];if(sc.parentNode)sc.parentNode.removeChild(sc);ok(d);};
+ sc.onerror=function(){fail("JSONP 로드 실패");};
+ sc.src=url+(url.indexOf("?")>=0?"&":"?")+"callback="+cb;document.head.appendChild(sc);});}
+function fetchProxy(p){var u=p+(p.indexOf("?")>=0?"&":"?")+"type=all";
+ return fetch(u,{redirect:"follow"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json();})
+  .catch(function(){return jsonp(u);});}
+function checkSatis(rows){var v=nm(rows).filter(function(d){return d.id==="SAT";}).map(function(d){return d.value;});
+ if(!v.length)return"소비만족도 SAT 항목이 없습니다(Code.gs 최신 버전으로 재배포 필요).";
+ var all100=v.every(function(x){return Math.abs(x-100)<1e-6;});
+ if(all100)return"소비만족도가 모두 100으로 왔습니다(계 항목 혼입).";
+ var bad=v.filter(function(x){return x<=0||x>=100;}).length;
+ if(bad)return"소비만족도 범위 밖 값 "+bad+"건.";
+ return null;}
+function live(){var p=($("proxy").value||"").trim()||PROXY_URL;
+ if(!/^https:\/\/script\.google\.com\/.*\/exec/.test(p)){alert("Apps Script 웹앱 URL(.../exec)을 입력하세요.");return;}
+ $("proxy").value=p;try{localStorage.setItem("kosisProxy",p);}catch(e){}
+ log("KOSIS 호출 중… (중계: Apps Script)");
+ fetchProxy(p).then(function(res){
+  if(!res||res.ok===false)throw new Error((res&&res.errMsg)||"중계 오류");
+  var s=res.data||res;
+  var err=checkSatis(s.satis||[]);if(err)throw new Error(err);
+  RAW={satis:s.satis||[],cpi:s.cpi||[],inc:s.inc||[]};
+  C={};DEMO=false;SEL=null;DSEL=null;AY=null;
+  $("mode").className="badge live";$("mode").textContent="실데이터";
+  hsum();
+  if(!$("vAna").classList.contains("hide"))openA();else if(VIEW)openV(VIEW);else home();
+  var m=res.meta&&res.meta.satis;
+  log("실데이터 연결 완료 · "+new Date().toLocaleString("ko-KR")+(m?" · 소비만족도 "+m.years.join("/")+"년, "+m.min+"~"+m.max+"%":""),"ok");
+ }).catch(function(e){log("연결 실패: "+e.message+" — DEMO 유지","err");});}
+
+/* 이벤트 바인딩 */
+$("bHome").onclick=home;$("bHome2").onclick=home;$("bHome3").onclick=home;
+$("bLive").onclick=live;$("bDemo").onclick=useDemo;$("bCsv").onclick=csv;
+$("bAnalysis").onclick=openA;$("bRep").onclick=openRep;
+$("bRepX").onclick=function(){$("modal").classList.add("hide");};
+$("bRepHtml").onclick=repHtml;$("bRepPdf").onclick=repPdf;$("bPrint").onclick=function(){window.print();};
+$("repScope").onchange=bRep;
+$("dShow").onchange=rDetail;$("aShow").onchange=rAna;
+$("dPlay").onclick=function(){play("d");};$("aPlay").onclick=function(){play("a");};
+$("dRange").oninput=function(){stop("d");var ys=YEARS.slice().reverse();YEAR=ys[+this.value];rDetail();};
+$("aRange").oninput=function(){stop("a");var ys=AYS.slice().reverse();AY=ys[+this.value];rAna();};
+$("dSpeed").onchange=function(){if(dT){stop("d");play("d");}};
+$("aSpeed").onchange=function(){if(aT){stop("a");play("a");}};
+$("cTop").onclick=function(){TS={};ser(VIEW,YEAR).slice(0,5).forEach(function(d){TS[d.region]=1;});rTrend();};
+$("cBot").onclick=function(){TS={};ser(VIEW,YEAR).slice(-5).forEach(function(d){TS[d.region]=1;});rTrend();};
+$("cAll").onclick=function(){TS={};REGIONS.forEach(function(r){TS[r]=1;});rTrend();};
+$("cNone").onclick=function(){TS={};rTrend();};
+$("modal").onclick=function(e){if(e.target===$("modal"))$("modal").classList.add("hide");};
+Array.prototype.forEach.call(document.querySelectorAll(".mcard"),function(c){
+ c.onclick=function(){openV(c.getAttribute("data-k"));};});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")$("modal").classList.add("hide");});
+(function(){var q=new URLSearchParams(location.search).get("proxy"),st="";
+ try{st=localStorage.getItem("kosisProxy")||"";}catch(e){}
+ var p=PROXY_URL||q||st;$("proxy").value=p;
+ useDemo();
+ if(/^https:\/\/script\.google\.com\/.*\/exec/.test(p))live();})();
+</script>
+</body>
+</html>
