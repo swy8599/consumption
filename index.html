@@ -179,7 +179,7 @@ svg.lchart{width:100%;height:auto;display:block;overflow:visible}
 </head>
 <body>
 <header>
-  <h1 id="bHome">전국 시도별 소비 만족도 <small>KOSIS Open API 대시보드</small></h1>
+  <h1 id="bHome">전국 시도별 소비 만족도 <small>KOSIS Open API 대시보드 · v3</small></h1>
   <span id="mode" class="badge">DEMO 데이터</span>
   <input id="proxy" placeholder="Apps Script 웹앱 URL (.../exec)" value="https://script.google.com/macros/s/AKfycby8TCng3qB1QTaE8M-iKnzT0gAPMMzxuR9WOIj-IZVSPUmuvxNqMW-i1xdlGvxLqxB2/exec">
   <button class="btn" id="bLive">실데이터 연결</button>
@@ -438,11 +438,20 @@ function nm(rows){return (rows||[]).map(function(r){
 function ser(k,y){var ck=k+"@"+y;if(C[ck])return C[ck];
  var a=nm(RAW[k]);
  var m={};
- if(k==="satis"){/* T00은 구성비 합계(항상 100) → 만족(T11 매우+T12 약간) 비율을 사용 */
-  var sat=a.filter(function(d){return d.year===y&&(d.id==="T11"||d.id==="T12");});
-  if(sat.length){sat.forEach(function(d){m[d.region]=(m[d.region]||0)+d.value;});}
-  else{a.filter(function(d){return d.year===y&&d.id!=="T00";})
-    .forEach(function(d){if(m[d.region]===undefined)m[d.region]=d.value;});}
+ if(k==="satis"){/* T00(구성비 합계)은 항상 100 → 만족(T11 매우+T12 약간) 비율 사용. 값이 전부 같으면 다른 항목으로 재시도 */
+  var yr=a.filter(function(d){return d.year===y;});
+  var flat=function(mm){var vs=[];for(var q in mm)vs.push(mm[q]);
+   return vs.length<2||vs.every(function(v){return Math.abs(v-vs[0])<1e-9;});};
+  var mk=function(ids,sum){var r={};yr.forEach(function(d){
+   if(ids&&ids.indexOf(d.id)<0)return;
+   if(!ids&&d.id==="T00")return;
+   if(sum)r[d.region]=(r[d.region]||0)+d.value;
+   else if(r[d.region]===undefined)r[d.region]=d.value;});return r;};
+  var cands=[mk(["T11","T12"],true),mk(null,false),mk(["T20"],false),mk(["T31","T32"],true)];
+  for(var ci=0;ci<cands.length;ci++){
+   var cm=cands[ci],n=0;for(var q2 in cm)n++;
+   if(n&&!flat(cm)){m=cm;break;}
+   if(n&&!Object.keys(m).length)m=cm;}
  }else{
   var rows=a.filter(function(d){return d.year===y;});
   rows.forEach(function(d){if(m[d.region]===undefined)m[d.region]=d.value;});
@@ -515,7 +524,7 @@ function chart(o){var sv=$(o.id),W=900,H=o.h||340,L=o.ml||62,R=72,T=16,B=36;
  sv.innerHTML=s;}
 
 function drawMap(o){var mn=o.min,mx=o.max,B=o.by,k=o.key;
- var s='<img src="'+MAP_IMAGE_SRC+'" alt="전국지도" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=MAP_IMAGE_ALT;}">';
+ var s='<img src="'+MAP_IMAGE_SRC+'" alt="전국지도" onerror="if(!this.dataset.f){this.dataset.f=1;this.src=MAP_IMAGE_ALT;}else{this.style.display='none';}">';
  s+='<svg class="kov" viewBox="0 0 '+MAP_W+' '+MAP_H+'" preserveAspectRatio="none">';
  REGIONS.forEach(function(r){var c=MPOS[r];if(!c)return;
   var d=B[r],t=(d&&mx!==mn)?(d.value-mn)/(mx-mn):(d?.5:0),col=d?RMP(k,t):"#e6eef5";
